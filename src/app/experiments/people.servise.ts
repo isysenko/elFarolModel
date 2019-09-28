@@ -1,27 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, AsyncSubject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IParamsPeople, IPerson } from 'app/interfaces';
-
 
 @Injectable()
 export class PeopleService {
-
-
-
-
-
     public generateExperiments(params: IParamsPeople): Observable<IPerson[]> {
         const experiments: IPerson[] = [];
         for (let i: number = 0; i <= params.nmbrPeople; i++) {
             experiments.push({
-                _id: i, friendsIds: this.getRandomArray(params.nmbrPeople, i),
+                _id: i,
+                friendsIds: this.getRandomArray(params.nmbrPeople, i),
                 lastDecisions: [],
                 lastResults: [],
-                coefficient: this.getRandomInt(5)
+                coefficient: this.getRandomInt(5),
             });
         }
         return of(experiments);
     }
+
     public startQuiz(people: IPerson[]): Observable<number[]> {
         const list: number[] = [];
         people.forEach((person: IPerson) => {
@@ -50,5 +46,4 @@ export class PeopleService {
         }
         return arr;
     }
-
 }

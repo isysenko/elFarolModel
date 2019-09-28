@@ -1,7 +1,7 @@
 export interface IExperiment {
     _id: number;
     barCapacity: number;
-    customers?: IPerson[];
+    customers?: number[];
 }
 
 export interface IParamsExperiments {

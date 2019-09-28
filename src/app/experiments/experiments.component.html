@@ -2,16 +2,9 @@
     <h2>Strategies</h2>
     <mat-card-content>
       <section class="strategies-section">
-        <mat-checkbox [(ngModel)]="strategy1">str1</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy2">str2</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy3">str3</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy4">str4</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy5">str5</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy6">str6</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy7">str7</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy8">str8</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy9">str9</mat-checkbox><br />
-        <mat-checkbox [(ngModel)]="strategy10">str20</mat-checkbox>
+       <li *ngFor="let item of strategies; index as i"> 
+         <mat-checkbox [(ngModel)]="strategies[i]">strategy {{i}}</mat-checkbox>
+       </li>
       </section>
     </mat-card-content>
     <section class="settings-section">
