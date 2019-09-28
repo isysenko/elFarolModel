@@ -1,0 +1,35 @@
+<mat-card>
+    <h2>Strategies</h2>
+    <mat-card-content>
+      <section class="strategies-section">
+        <mat-checkbox [(ngModel)]="strategy1">str1</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy2">str2</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy3">str3</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy4">str4</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy5">str5</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy6">str6</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy7">str7</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy8">str8</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy9">str9</mat-checkbox><br />
+        <mat-checkbox [(ngModel)]="strategy10">str20</mat-checkbox>
+      </section>
+    </mat-card-content>
+    <section class="settings-section">
+      <mat-form-field>
+        <h2>Bar capacity</h2>
+        <input matInput [(ngModel)]="barCapacity">
+      </mat-form-field>
+      <mat-form-field>
+        <h2>Number of experiments</h2>
+        <input matInput [(ngModel)]="experimentsNumber">
+      </mat-form-field>
+      <mat-form-field>
+        <h2>Number of people</h2>
+        <input matInput [(ngModel)]="peopleNumber">
+      </mat-form-field>
+    </section>
+  
+    <button mat-raised-button color="accent" (click)="runExperiments()">Run experiments</button>
+
+    <!-- <div *ngFor="let item of experiments$ | async">{{item._id}}</div>s -->
+  </mat-card>
