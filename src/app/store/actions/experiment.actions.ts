@@ -6,7 +6,8 @@ export enum ExperimentsActions {
     INIT_EXPERIMENT_SUCCESS = 'INIT_EXPERIMENT_SUCCESS',
     INIT_EXPERIMENT_ERROR = 'INIT_EXPERIMENT_ERROR',
     START_QUIZ_SUCCESS = 'START_QUIZ_SUCCESS',
-    ADD_EXPERIMENT = 'ADD_EXPERIMENT'
+    ADD_EXPERIMENT = 'ADD_EXPERIMENT',
+    RESET = 'RESET'
 
 }
 // tslint:disable: max-classes-per-file
@@ -33,6 +34,12 @@ export class AddExperimentToList {
     public readonly type: string = ExperimentsActions.ADD_EXPERIMENT;
     public constructor(public payload: IExperiment) {}
 }
+export class resetStore {
+    public readonly type: string = ExperimentsActions.RESET;
+}
 
-
-export type ExperimentsActionsTypes = InitExperimentPending | InitExperimentSuccess | InitExperimentError |AddExperimentToList;
+export type ExperimentsActionsTypes = InitExperimentPending |
+ InitExperimentSuccess |
+  InitExperimentError |
+  AddExperimentToList |
+  resetStore;

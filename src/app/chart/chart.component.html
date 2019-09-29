@@ -1,1 +1,7 @@
-<p>chart works!</p>
+<div *ngIf='chartLabels.length>0' style="display: block">
+    <canvas baseChart
+        [datasets]="chartData"
+        [labels]="chartLabels"
+        [chartType]="chartType">
+    </canvas>
+</div>

@@ -17,6 +17,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { effects } from './store/effects';
 import { ExperimentsService } from './experiments/experiments.servise';
 import { PeopleService } from './experiments/people.servise';
+import { ChartsModule } from 'ng2-charts';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -38,6 +40,8 @@ import { PeopleService } from './experiments/people.servise';
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot(effects),
+    ChartsModule,
+    FlexLayoutModule
   ],
   providers: [ExperimentsService, PeopleService],
   bootstrap: [AppComponent]

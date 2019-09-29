@@ -2,6 +2,7 @@ export interface IExperiment {
     _id: number;
     barCapacity: number;
     customers?: number[];
+    applicantsNumber?: number;
 }
 
 export interface IParamsExperiments {
