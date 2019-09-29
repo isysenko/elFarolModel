@@ -1,6 +1,6 @@
 import { AssignmentAction } from './../actions/people.actions';
 import { Injectable } from '@angular/core';
-import { catchError, map, switchMap, withLatestFrom, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { IParamsPeople, IPerson } from 'app/interfaces';
@@ -14,8 +14,6 @@ import {
 } from '../actions/people.actions';
 import { PeopleService } from 'app/experiments/people.servise';
 import { StartQuizSuccess } from '../actions/experiment.actions';
-import { IStore } from '..';
-import { Store } from '@ngrx/store';
 
 @Injectable()
 export class PeopleEffects {
@@ -34,29 +32,6 @@ export class PeopleEffects {
                 })
             )
         )
-    );
-
-    // @Effect()
-    // // tslint:disable-next-line: no-any
-    // public a$: any = this.actions$.pipe(
-    //     ofType(PeopleActions.INIT_PEOPLE_SUCCESS),
-    //     withLatestFrom(this.store$.select(state => state.experiments.length)),
-    //     map(([_count, k]) => k),
-    //     switchMap((maxCount: number) =>
-    //         range(1, maxCount - 1).pipe(
-    //             withLatestFrom(this.store$.select(state => state.people)),
-    //             map(([_count, people]) => people),
-    //             map(people => new StartQuizPending(people))
-    //         )
-    //     )
-    // );
-    @Effect()
-    // tslint:disable-next-line: no-any
-    public a$: any = this.actions$.pipe(
-        ofType(PeopleActions.INIT_PEOPLE_SUCCESS),
-        withLatestFrom(this.store$.select(state => state.people)),
-                map(([_count, people]) => people),
-                map(people => new StartQuizPending(people))
     );
 
     @Effect()
@@ -78,9 +53,9 @@ export class PeopleEffects {
         )
     );
 
+
     public constructor(
         private actions$: Actions,
-        private peopleService: PeopleService,
-        private store$: Store<IStore>
+        private peopleService: PeopleService
     ) {}
 }

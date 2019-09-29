@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { ExperimentsActions, InitExperimentPending, InitExperimentSuccess } from '../actions/experiment.actions';
+import { AddExperimentToList,
+        ExperimentsActions,
+        InitExperimentPending,
+        InitExperimentSuccess
+    } from '../actions/experiment.actions';
 import { ExperimentsService } from 'app/experiments/experiments.servise';
 import { IExperiment, IParamsExperiments } from 'app/interfaces';
+import { IStore } from '..';
+import { Store } from '@ngrx/store';
+import { PeopleActions, StartQuizPending } from '../actions/people.actions';
 
 @Injectable()
 export class ExperimentEffects {
@@ -18,6 +25,25 @@ export class ExperimentEffects {
                 .pipe(map((experiments: IExperiment) => new InitExperimentSuccess(experiments)))
         )
     );
-
-    public constructor(private actions$: Actions, private experimentService: ExperimentsService) {}
+    @Effect()
+    // tslint:disable-next-line: no-any
+    public a$: any = this.actions$.pipe(
+        ofType(ExperimentsActions.INIT_EXPERIMENT_SUCCESS),
+        withLatestFrom(this.store$.select(state => state.people)),
+        map(([_count, people]) => people),
+        map(people => new StartQuizPending(people))
+    );
+    @Effect()
+    // tslint:disable-next-line: no-any
+    public addExperiment$: any = this.actions$.pipe(
+        ofType(PeopleActions.ASSIGNMENT),
+        withLatestFrom(this.store$.select(state => state.currentExperiment)),
+        map(([_count, experiment]) => experiment),
+        map(experiment => new AddExperimentToList(experiment))
+    );
+    public constructor(
+        private actions$: Actions,
+        private experimentService: ExperimentsService,
+        private store$: Store<IStore>
+    ) {}
 }

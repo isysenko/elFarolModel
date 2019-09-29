@@ -5,8 +5,6 @@ import { InitExperimentPending } from 'app/store/actions/experiment.actions';
 import { Observable } from 'rxjs';
 import { IExperiment, IPerson } from 'app/interfaces';
 import { InitPeoplePending } from 'app/store/actions/people.actions';
-// import { PeopleService } from './people.servise';
-// import { tap, map, takeLast, take, switchMap } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -16,9 +14,9 @@ import { map } from 'rxjs/operators';
 })
 export class ExperimentsComponent implements OnInit {
     public strategies: boolean[] = [true, true, true, true, true, true, true, true, true, true];
-    public barCapacity: string = '100';
-    public experimentsNumber: string = '100';
-    public peopleNumber: string = '100';
+    public barCapacity: string = '10';
+    public experimentsNumber: string = '10';
+    public peopleNumber: string = '10';
     public experiments$?: Observable<IExperiment[]>;
     public people$?: Observable<IPerson[]>;
     public a$?: Observable<any>;

@@ -25,7 +25,15 @@ export class PeopleService {
                 list.push(person._id);
             }
         });
-        return of(list);
+        return of(this.shuffle(list));
+    }
+
+    private shuffle(a: number[]): number[] {
+        for (let i: number = a.length - 1; i > 0; i--) {
+            const j: number = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
     }
 
     private getRandomInt(max: number): number {
