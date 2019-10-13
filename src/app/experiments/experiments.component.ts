@@ -26,13 +26,14 @@ export class ExperimentsComponent {
         { name: 'str8', value: true },
         { name: 'str9', value: true },
     ];
-    public barCapacity: string = '30';
-    public experimentsNumber: string = '50';
-    public peopleNumber: string = '50';
+    public barCapacity: string = '60';
+    public experimentsNumber: string = '100';
+    public peopleNumber: string = '100';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
     public showMore: boolean = false;
+    public showMoreStrategy: boolean = false;
 
     public constructor(private _store: Store<IStore>) {}
     public ngOnInit(): void {
@@ -50,17 +51,18 @@ export class ExperimentsComponent {
     }
     public runExperiments(): void {
         this.ifExpRun = true;
-        const str: IStrategy[] = [];
+        const strategy: IStrategy[] = [];
         for (let i: number = 0; i < this.strategies.length; i++) {
             if (this.strategies[i].value === true) {
-                str.push({ name: this.strategies[i].name, index: i, count: 0});
+                strategy.push({ name: this.strategies[i].name, index: i, count: 0 });
             }
         }
-        this._store.dispatch(new InitStrategies(str));
+        this._store.dispatch(new InitStrategies([...strategy]));
+
         this._store.dispatch(
             new InitPeoplePending({
                 nmbrPeople: Number(this.peopleNumber),
-                strategies: str,
+                strategies: strategy,
             })
         );
         for (let i: number = 0; i < Number(this.experimentsNumber); i++) {
@@ -74,6 +76,10 @@ export class ExperimentsComponent {
     }
     public showMoreInfo(): void {
         this.showMore = !this.showMore;
+    }
+
+    public showMoreInfoStrategy(): void {
+        this.showMoreStrategy = !this.showMoreStrategy;
     }
     public reset(): void {
         this._store.dispatch(new ResetStore());

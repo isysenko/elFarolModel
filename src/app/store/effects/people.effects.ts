@@ -16,7 +16,7 @@ import { PeopleService } from 'app/experiments/people.servise';
 import { AddStrategiesToExperiment, StartQuizSuccess } from '../actions/experiment.actions';
 import { Store } from '@ngrx/store';
 import { IStore } from '..';
-import { UpdateStrategies } from '../actions/strategies.actions';
+import { InitStrategies } from '../actions/strategies.actions';
 
 @Injectable()
 export class PeopleEffects {
@@ -27,7 +27,7 @@ export class PeopleEffects {
         map((action: InitPeoplePending) => action.payload),
         switchMap((params: IParamsPeople) =>
             this.peopleService.generatePeoples(params).pipe(
-                map((people: IPerson[]) => new InitPeopleSuccess(people)),
+                switchMap((people: IPerson[]) => of(new InitPeopleSuccess(people))),
                 // tslint:disable-next-line: no-any
                 catchError((err: any) => {
                     console.error(err);
@@ -64,11 +64,8 @@ export class PeopleEffects {
         withLatestFrom(this.store$.select((state: IStore) => state.people)),
         // tslint:disable-next-line: typedef
         switchMap(([[_action, strategies], people]) =>
-            this.peopleService.increaseStrategiesCounters(people, strategies).pipe(
-                mergeMap((array: IStrategy[]) => [
-                    new UpdateStrategies(array),
-                    new AddStrategiesToExperiment(array)
-                ])
+            this.peopleService.increaseStrategiesCounters(people, [...strategies]).pipe(
+                mergeMap((array: IStrategy[]) => [new InitStrategies([]), new AddStrategiesToExperiment(array)])
             )
         )
     );

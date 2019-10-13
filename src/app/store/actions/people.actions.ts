@@ -1,4 +1,4 @@
-import { IParamsPeople, IPerson } from 'app/interfaces';
+import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
 
 // tslint:disable: max-classes-per-file
 
@@ -29,7 +29,7 @@ export class InitPeopleError {
 
 export class StartQuizPending {
     public readonly type: string = PeopleActions.START_QUIZ_PENDING;
-    public constructor(public payload: IPerson[]) {}
+    public constructor(public payload: IPerson[], public strategies: IStrategy[]) {}
 }
 
 export class StartQuizError {

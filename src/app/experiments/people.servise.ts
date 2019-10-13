@@ -1,7 +1,6 @@
-import { IStrategy } from './../interfaces';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { IParamsPeople, IPerson } from 'app/interfaces';
+import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
 
 @Injectable()
 export class PeopleService {
@@ -14,10 +13,7 @@ export class PeopleService {
             i: 0,
         };
         for (let i: number = 0; i < params.nmbrPeople; i++) {
-            if (
-                strategy.counter > strategy.countForStrategy &&
-                strategy.i !== params.strategies.length - 1
-            ) {
+            if (strategy.counter > strategy.countForStrategy && strategy.i !== params.strategies.length - 1) {
                 strategy.counter = 1;
                 strategy.i++;
             }
@@ -45,14 +41,20 @@ export class PeopleService {
     }
 
     public increaseStrategiesCounters(people: IPerson[], strategy: IStrategy[]): Observable<IStrategy[]> {
-        people.forEach((person: IPerson) => {
-            strategy.forEach((str: IStrategy) => {
-                if (str.index === person.strategy) {
-                    str.count++;
-                }
-            });
+        strategy = strategy.map((i: IStrategy) => {
+            i.count = 0;
+            return i;
         });
-        return of(strategy);
+
+        const res: IStrategy[] = [...strategy];
+        for (let i: number = 0; i < people.length; i++) {
+            for (let j: number = 0; j < res.length; j++) {
+                if (people[i].strategy === res[j].index) {
+                    res[j].count++;
+                }
+            }
+        }
+        return of(res);
     }
 
     private shuffle(a: number[]): number[] {

@@ -5,10 +5,10 @@ const initialState: IStrategy[] = [];
 
 export function strategiesReducer(state: IStrategy[] = initialState, action: StrategiesActionsTypes): IStrategy[] {
     if (action.type === StrategiesActions.INIT_STRATEGIES) {
-        return action.payload;
+        return Array.from(action.payload);
     }
     if (action.type === StrategiesActions.UPDATE_STRATEGIES) {
-        return action.payload;
+        return Array.from(action.payload);
     }
     return state;
 }

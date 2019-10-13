@@ -14,11 +14,11 @@ export function currentExperimentReducer(state: IExperiment = initState, action:
     if (action instanceof StartQuizSuccess) {
         state.applicantsNumber = action.payload.length;
         action.payload.length = action.payload.length > state.barCapacity ? state.barCapacity : action.payload.length;
-        state.customers = action.payload;
+        state.customers = Array.from(action.payload);
         return state;
     }
     if (action instanceof AddStrategiesToExperiment) {
-        state.strategies = action.payload;
+        state.strategies = Array.from(action.payload);
         return state;
     }
     return state;
