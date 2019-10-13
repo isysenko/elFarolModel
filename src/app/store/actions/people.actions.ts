@@ -34,6 +34,7 @@ export class StartQuizPending {
 
 export class StartQuizError {
     public readonly type: string = PeopleActions.START_QUIZ_ERROR;
+    // tslint:disable-next-line: no-any
     public constructor(public payload: any) {}
 }
 

@@ -38,7 +38,7 @@ export class AddStrategiesToExperiment {
     public readonly type: string = ExperimentsActions.ADD_STRATEGIES_TO_EXPERIMENT;
     public constructor(public payload: IStrategy[]) {}
 }
-export class resetStore {
+export class ResetStore {
     public readonly type: string = ExperimentsActions.RESET;
 }
 
@@ -47,5 +47,5 @@ export type ExperimentsActionsTypes =
     | InitExperimentSuccess
     | InitExperimentError
     | AddExperimentToList
-    | resetStore
+    | ResetStore
     | AddStrategiesToExperiment;

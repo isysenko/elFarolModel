@@ -1,4 +1,4 @@
-import { ActionReducerMap} from '@ngrx/store';
+import { ActionReducerMap } from '@ngrx/store';
 import { experimentsReducer } from './reducers/expirement.reducer';
 import { IExperiment, IPerson, IStrategy } from 'app/interfaces';
 import { peopleReducer } from './reducers/people.reducer';

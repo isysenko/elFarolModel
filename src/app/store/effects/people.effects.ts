@@ -1,9 +1,3 @@
-import { AssignmentAction } from './../actions/people.actions';
-import { Injectable } from '@angular/core';
-import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
 import {
     InitPeopleError,
     InitPeoplePending,
@@ -12,8 +6,14 @@ import {
     StartQuizError,
     StartQuizPending,
 } from '../actions/people.actions';
+import { AssignmentAction } from './../actions/people.actions';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
+import { Injectable } from '@angular/core';
 import { PeopleService } from 'app/experiments/people.servise';
-import { StartQuizSuccess, AddStrategiesToExperiment } from '../actions/experiment.actions';
+import { AddStrategiesToExperiment, StartQuizSuccess } from '../actions/experiment.actions';
 import { Store } from '@ngrx/store';
 import { IStore } from '..';
 import { UpdateStrategies } from '../actions/strategies.actions';
@@ -62,6 +62,7 @@ export class PeopleEffects {
         ofType(PeopleActions.START_QUIZ_SUCCESS),
         withLatestFrom(this.store$.select((state: IStore) => state.strategies)),
         withLatestFrom(this.store$.select((state: IStore) => state.people)),
+        // tslint:disable-next-line: typedef
         switchMap(([[_action, strategies], people]) =>
             this.peopleService.increaseStrategiesCounters(people, strategies).pipe(
                 mergeMap((array: IStrategy[]) => [

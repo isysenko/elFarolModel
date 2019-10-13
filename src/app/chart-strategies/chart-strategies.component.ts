@@ -1,4 +1,3 @@
-import { IExperiment } from './../interfaces';
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IStore } from 'app/store';
@@ -6,10 +5,10 @@ import { IExperiment, IStrategy } from 'app/interfaces';
 @Component({
     selector: 'app-chart-strategies',
     templateUrl: './chart-strategies.component.html',
-    styleUrls: ['./chart-strategies.component.css'],
 })
 export class ChartStrategiesComponent implements OnInit {
     public chartLabels: number[] = [];
+    // tslint:disable-next-line: no-any
     public chartData: any[] = [];
     public chartType: string = 'line';
     public experiments?: IExperiment[];

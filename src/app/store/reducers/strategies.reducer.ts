@@ -1,4 +1,4 @@
-import { StrategiesActionsTypes, StrategiesActions } from '../actions/strategies.actions';
+import { StrategiesActions, StrategiesActionsTypes } from '../actions/strategies.actions';
 import { IStrategy } from 'app/interfaces';
 
 const initialState: IStrategy[] = [];

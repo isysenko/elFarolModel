@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { IStore } from 'app/store';
-import { InitExperimentPending, resetStore } from 'app/store/actions/experiment.actions';
+import { InitExperimentPending, ResetStore } from 'app/store/actions/experiment.actions';
 import { Observable } from 'rxjs';
 import { IExperiment, IPerson, IStrategy } from 'app/interfaces';
 import { InitPeoplePending } from 'app/store/actions/people.actions';
@@ -13,6 +13,7 @@ import { InitStrategies } from 'app/store/actions/strategies.actions';
     styleUrls: ['./experiments.component.css'],
 })
 export class ExperimentsComponent {
+    // tslint:disable-next-line: no-any
     public strategies: any[] = [
         { name: 'Random (0)', value: true },
         { name: 'str1', value: true },
@@ -75,6 +76,6 @@ export class ExperimentsComponent {
         this.showMore = !this.showMore;
     }
     public reset(): void {
-        this._store.dispatch(new resetStore());
+        this._store.dispatch(new ResetStore());
     }
 }
