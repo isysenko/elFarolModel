@@ -42,4 +42,9 @@ export class AssignmentAction {
     public constructor(public payload: number[]) {}
 }
 
-export type PeopleActionsTypes = InitPeoplePending | InitPeopleSuccess | InitPeopleError | AssignmentAction;
+export type PeopleActionsTypes =
+    | InitPeoplePending
+    | InitPeopleSuccess
+    | InitPeopleError
+    | AssignmentAction
+    | StartQuizPending;

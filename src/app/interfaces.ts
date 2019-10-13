@@ -3,11 +3,13 @@ export interface IExperiment {
     barCapacity: number;
     customers?: number[];
     applicantsNumber?: number;
+    strategies: IStrategy[];
 }
 
 export interface IParamsExperiments {
     nmbrExperiments: number;
     barCapacity: number;
+    strategies: IStrategy[];
 }
 
 export interface IPerson {
@@ -16,8 +18,15 @@ export interface IPerson {
     lastDecisions: boolean[];
     lastResults: boolean[];
     coefficient: number;
+    strategy: number;
 }
 
 export interface IParamsPeople {
     nmbrPeople: number;
+    strategies: IStrategy[];
+}
+export interface IStrategy {
+    index: number;
+    name: string;
+    count: number;
 }

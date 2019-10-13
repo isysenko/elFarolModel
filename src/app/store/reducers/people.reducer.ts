@@ -9,11 +9,20 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
     }
     if (action instanceof StartQuizPending) {
         state.forEach((item: IPerson) => {
+            let result: boolean;
+            switch (item.strategy) {
+                case 0:
+                    result = randomStrategy();
+                    break;
+                default:
+                    result = randomStrategy();
+                    break;
+            }
             if (item.lastDecisions.length >= 5) {
                 item.lastDecisions.shift();
-                item.lastDecisions.push(Math.random() >= 0.5);
+                item.lastDecisions.push(result);
             } else {
-                item.lastDecisions.push(Math.random() >= 0.5);
+                item.lastDecisions.push(result);
             }
         });
         return state;
@@ -33,4 +42,8 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
         });
     }
     return state;
+}
+
+export function randomStrategy(): boolean {
+    return Math.random() >= 0.5;
 }

@@ -1,9 +1,9 @@
 import { AssignmentAction } from './../actions/people.actions';
 import { Injectable } from '@angular/core';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { IParamsPeople, IPerson } from 'app/interfaces';
+import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
 import {
     InitPeopleError,
     InitPeoplePending,
@@ -14,6 +14,9 @@ import {
 } from '../actions/people.actions';
 import { PeopleService } from 'app/experiments/people.servise';
 import { StartQuizSuccess } from '../actions/experiment.actions';
+import { Store } from '@ngrx/store';
+import { IStore } from '..';
+import { UpdateStrategies } from '../actions/strategies.actions';
 
 @Injectable()
 export class PeopleEffects {
@@ -23,7 +26,7 @@ export class PeopleEffects {
         ofType(PeopleActions.INIT_PEOPLE_PENDING),
         map((action: InitPeoplePending) => action.payload),
         switchMap((params: IParamsPeople) =>
-            this.peopleService.generateExperiments(params).pipe(
+            this.peopleService.generatePeoples(params).pipe(
                 map((people: IPerson[]) => new InitPeopleSuccess(people)),
                 // tslint:disable-next-line: no-any
                 catchError((err: any) => {
@@ -43,7 +46,8 @@ export class PeopleEffects {
             this.peopleService.startQuiz(people).pipe(
                 mergeMap((listPeople: number[]) => [
                     new StartQuizSuccess(listPeople),
-                    new AssignmentAction(listPeople)]),
+                    new AssignmentAction(listPeople),
+                ]),
                 // tslint:disable-next-line: no-any
                 catchError((err: any) => {
                     console.error(err);
@@ -52,10 +56,24 @@ export class PeopleEffects {
             )
         )
     );
-
+    @Effect()
+    // tslint:disable-next-line: no-any
+    public countStrategies$: any = this.actions$.pipe(
+        ofType(PeopleActions.START_QUIZ_SUCCESS),
+        withLatestFrom(this.store$.select((state: IStore) => state.strategies)),
+        withLatestFrom(this.store$.select((state: IStore) => state.people)),
+        switchMap(([[_action, strategies], people]) =>
+            this.peopleService.increaseStrategiesCounters(people, strategies).pipe(
+                switchMap((array: IStrategy[]) => {
+                    return of(new UpdateStrategies(array));
+                })
+            )
+        )
+    );
 
     public constructor(
         private actions$: Actions,
-        private peopleService: PeopleService
+        private peopleService: PeopleService,
+        private store$: Store<IStore>
     ) {}
 }

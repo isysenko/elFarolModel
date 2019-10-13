@@ -1,6 +1,6 @@
 import { ExperimentsActionsTypes, InitExperimentSuccess, StartQuizSuccess } from '../actions/experiment.actions';
 import { IExperiment } from 'app/interfaces';
-const initState: IExperiment = { _id: 1, barCapacity: 100 };
+const initState: IExperiment = { _id: 1, barCapacity: 100, strategies: [] };
 
 export function currentExperimentReducer(state: IExperiment = initState, action: ExperimentsActionsTypes): IExperiment {
     if (action instanceof InitExperimentSuccess) {

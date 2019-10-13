@@ -1,21 +1,36 @@
+import { IStrategy } from './../interfaces';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { IParamsPeople, IPerson } from 'app/interfaces';
 
 @Injectable()
 export class PeopleService {
-    public generateExperiments(params: IParamsPeople): Observable<IPerson[]> {
-        const experiments: IPerson[] = [];
-        for (let i: number = 0; i <= params.nmbrPeople; i++) {
-            experiments.push({
+    public generatePeoples(params: IParamsPeople): Observable<IPerson[]> {
+        const people: IPerson[] = [];
+        const strategy = {
+            countForStrategy: Math.round(params.nmbrPeople / params.strategies.length),
+            counter: 1,
+            i: 0,
+        };
+        for (let i: number = 0; i < params.nmbrPeople; i++) {
+            if (
+                strategy.counter > strategy.countForStrategy &&
+                strategy.i !== params.strategies.length - 1
+            ) {
+                strategy.counter = 1;
+                strategy.i++;
+            }
+            people.push({
                 _id: i,
-                friendsIds: this.getRandomArray(params.nmbrPeople, i),
+                friendsIds: this.getRandomArray(i),
                 lastDecisions: [],
                 lastResults: [],
                 coefficient: this.getRandomInt(5),
+                strategy: params.strategies[strategy.i].index,
             });
+            strategy.counter++;
         }
-        return of(experiments);
+        return of(people);
     }
 
     public startQuiz(people: IPerson[]): Observable<number[]> {
@@ -26,6 +41,17 @@ export class PeopleService {
             }
         });
         return of(this.shuffle(list));
+    }
+
+    public increaseStrategiesCounters(people: IPerson[], strategy: IStrategy[]): Observable<IStrategy[]> {
+        people.forEach((person: IPerson) => {
+            strategy.forEach((str: IStrategy) => {
+                if (str.index === person.strategy) {
+                    str.count++;
+                }
+            });
+        });
+        return of(strategy);
     }
 
     private shuffle(a: number[]): number[] {
@@ -40,17 +66,14 @@ export class PeopleService {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    private getRandomArray(numberPerson: number, id: number): number[] {
+    private getRandomArray(id: number): number[] {
         const arr: number[] = [];
-        const nmbr: number = Math.floor(Math.random() * Math.floor(3));
+        const max: number = id > 3 ? 3 : id;
+        const nmbr: number = Math.floor(Math.random() * Math.floor(max));
         for (let i: number = 0; i <= nmbr; i++) {
-            let ins: number = Math.floor(Math.random() * Math.floor(numberPerson));
-            if (ins !== id) {
-                arr.push(ins);
-            } else {
-                ins = Math.floor(Math.random() * Math.floor(numberPerson));
-                arr.push(ins);
-            }
+            let ins: number = Math.floor(Math.random() * Math.floor(id - 1));
+            ins = Math.floor(Math.random() * Math.floor(id));
+            arr.push(ins);
         }
         return arr;
     }

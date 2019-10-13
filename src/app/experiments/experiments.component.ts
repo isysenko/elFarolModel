@@ -3,8 +3,9 @@ import { Store, select } from '@ngrx/store';
 import { IStore } from 'app/store';
 import { InitExperimentPending, resetStore } from 'app/store/actions/experiment.actions';
 import { Observable } from 'rxjs';
-import { IExperiment, IPerson } from 'app/interfaces';
+import { IExperiment, IPerson, IStrategy } from 'app/interfaces';
 import { InitPeoplePending } from 'app/store/actions/people.actions';
+import { InitStrategies } from 'app/store/actions/strategies.actions';
 
 @Component({
     selector: 'app-experiments',
@@ -12,10 +13,21 @@ import { InitPeoplePending } from 'app/store/actions/people.actions';
     styleUrls: ['./experiments.component.css'],
 })
 export class ExperimentsComponent {
-    public strategies: boolean[] = [true, true, true, true, true, true, true, true, true, true];
-    public barCapacity: string = '30';
-    public experimentsNumber: string = '50';
-    public peopleNumber: string = '50';
+    public strategies: any[] = [
+        { name: 'Random', value: true },
+        { name: 'str1', value: true },
+        { name: 'str2', value: true },
+        { name: 'str3', value: true },
+        { name: 'str4', value: true },
+        { name: 'str5', value: true },
+        { name: 'str6', value: true },
+        { name: 'str7', value: true },
+        { name: 'str8', value: true },
+        { name: 'str9', value: true },
+    ];
+    public barCapacity: string = '60';
+    public experimentsNumber: string = '100';
+    public peopleNumber: string = '100';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
@@ -37,9 +49,17 @@ export class ExperimentsComponent {
     }
     public runExperiments(): void {
         this.ifExpRun = true;
+        const str: IStrategy[] = [];
+        for (let i: number = 0; i < this.strategies.length; i++) {
+            if (this.strategies[i].value === true) {
+                str.push({ name: this.strategies[i].name, index: i, count: 0});
+            }
+        }
+        this._store.dispatch(new InitStrategies(str));
         this._store.dispatch(
             new InitPeoplePending({
                 nmbrPeople: Number(this.peopleNumber),
+                strategies: str,
             })
         );
         for (let i: number = 0; i < Number(this.experimentsNumber); i++) {
@@ -47,16 +67,15 @@ export class ExperimentsComponent {
                 new InitExperimentPending({
                     nmbrExperiments: Number(this.experimentsNumber),
                     barCapacity: Number(this.barCapacity),
+                    strategies: str,
                 })
             );
         }
     }
-    public showMoreInfo(): void  {
+    public showMoreInfo(): void {
         this.showMore = !this.showMore;
     }
-    public reset(): void  {
-        this._store.dispatch(
-            new resetStore()
-        );
+    public reset(): void {
+        this._store.dispatch(new resetStore());
     }
 }
