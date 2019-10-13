@@ -19,13 +19,15 @@ import { ExperimentsService } from './experiments/experiments.servise';
 import { PeopleService } from './experiments/people.servise';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ChartStrategiesComponent } from './chart-strategies/chart-strategies.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartComponent,
-    ExperimentsComponent
+    ExperimentsComponent,
+    ChartStrategiesComponent
   ],
   imports: [
     BrowserModule,

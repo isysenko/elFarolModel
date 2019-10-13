@@ -7,6 +7,7 @@ import { IParamsPeople, IPerson } from 'app/interfaces';
 export class PeopleService {
     public generatePeoples(params: IParamsPeople): Observable<IPerson[]> {
         const people: IPerson[] = [];
+        // tslint:disable-next-line: typedef
         const strategy = {
             countForStrategy: Math.round(params.nmbrPeople / params.strategies.length),
             counter: 1,

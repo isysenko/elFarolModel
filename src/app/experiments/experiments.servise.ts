@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class ExperimentsService {
     public generateExperiment(params: IParamsExperiments): Observable<any> {
-        const exp: IExperiment = { _id: 1, barCapacity: params.barCapacity, strategies: params.strategies };
+        const exp: IExperiment = { _id: 1, barCapacity: params.barCapacity };
         return of(exp);
     }
 }

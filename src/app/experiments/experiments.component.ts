@@ -14,7 +14,7 @@ import { InitStrategies } from 'app/store/actions/strategies.actions';
 })
 export class ExperimentsComponent {
     public strategies: any[] = [
-        { name: 'Random', value: true },
+        { name: 'Random (0)', value: true },
         { name: 'str1', value: true },
         { name: 'str2', value: true },
         { name: 'str3', value: true },
@@ -25,9 +25,9 @@ export class ExperimentsComponent {
         { name: 'str8', value: true },
         { name: 'str9', value: true },
     ];
-    public barCapacity: string = '60';
-    public experimentsNumber: string = '100';
-    public peopleNumber: string = '100';
+    public barCapacity: string = '30';
+    public experimentsNumber: string = '50';
+    public peopleNumber: string = '50';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
@@ -67,7 +67,6 @@ export class ExperimentsComponent {
                 new InitExperimentPending({
                     nmbrExperiments: Number(this.experimentsNumber),
                     barCapacity: Number(this.barCapacity),
-                    strategies: str,
                 })
             );
         }

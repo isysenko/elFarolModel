@@ -13,7 +13,7 @@ import {
     StartQuizPending,
 } from '../actions/people.actions';
 import { PeopleService } from 'app/experiments/people.servise';
-import { StartQuizSuccess } from '../actions/experiment.actions';
+import { StartQuizSuccess, AddStrategiesToExperiment } from '../actions/experiment.actions';
 import { Store } from '@ngrx/store';
 import { IStore } from '..';
 import { UpdateStrategies } from '../actions/strategies.actions';
@@ -64,9 +64,10 @@ export class PeopleEffects {
         withLatestFrom(this.store$.select((state: IStore) => state.people)),
         switchMap(([[_action, strategies], people]) =>
             this.peopleService.increaseStrategiesCounters(people, strategies).pipe(
-                switchMap((array: IStrategy[]) => {
-                    return of(new UpdateStrategies(array));
-                })
+                mergeMap((array: IStrategy[]) => [
+                    new UpdateStrategies(array),
+                    new AddStrategiesToExperiment(array)
+                ])
             )
         )
     );
