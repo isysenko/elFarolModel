@@ -53,12 +53,11 @@ export class ExperimentsComponent {
         this.ifExpRun = true;
         const strategy: IStrategy[] = [];
         for (let i: number = 0; i < this.strategies.length; i++) {
-            if (this.strategies[i].value === true) {
+            if (this.strategies[i]) {
                 strategy.push({ name: this.strategies[i].name, index: i, count: 0 });
             }
         }
         this._store.dispatch(new InitStrategies([...strategy]));
-
         this._store.dispatch(
             new InitPeoplePending({
                 nmbrPeople: Number(this.peopleNumber),

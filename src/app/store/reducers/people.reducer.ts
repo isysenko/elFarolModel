@@ -1,4 +1,3 @@
-import { IStrategy } from './../../interfaces';
 import { IPerson } from 'app/interfaces';
 import { InitPeopleSuccess, PeopleActionsTypes, StartQuizPending } from '../actions/people.actions';
 import { AddExperimentToList } from '../actions/experiment.actions';
@@ -11,7 +10,7 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
     if (action instanceof StartQuizPending) {
         state.forEach((item: IPerson) => {
             let result: boolean;
-            item.strategy = checkStrategy(item.strategy, item.lastResults, action.strategies);
+            item.strategy = checkStrategy(item, state);
             switch (item.strategy) {
                 case 0:
                     result = randomStrategy();
@@ -50,9 +49,10 @@ export function randomStrategy(): boolean {
     return Math.random() >= 0.5;
 }
 
-export function checkStrategy(strategyNumber: number, lastResults: boolean[], strategies: IStrategy[]): number {
-    if (!lastResults.splice(3).includes(true)) {
-        strategyNumber = strategies[Math.floor(Math.random() * Math.floor(strategies.length))].index;
+export function checkStrategy(person: IPerson, people: IPerson[]): number {
+    let strategyNumber: number = person.strategy;
+    if (!person.lastResults.splice(3).includes(true)) {
+        strategyNumber = people[Math.floor(Math.random() * Math.floor(people.length))].strategy;
     }
     return strategyNumber;
 }
