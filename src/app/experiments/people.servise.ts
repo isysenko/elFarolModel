@@ -41,8 +41,6 @@ export class PeopleService {
     }
 
     public increaseStrategiesCounters(people: IPerson[], strategy: IStrategy[]): Observable<IStrategy[]> {
-        console.log('people', people);
-        console.log('strategies ', strategy);
         strategy = strategy.map((i: IStrategy) => {
             i.count = 0;
             return i;
@@ -56,7 +54,6 @@ export class PeopleService {
                 }
             }
         }
-        console.log('res ', res);
         return of(res);
     }
 

@@ -18,7 +18,7 @@ export function currentExperimentReducer(state: IExperiment = initState, action:
         return state;
     }
     if (action instanceof AddStrategiesToExperiment) {
-        console.log(`adding `,action.payload);
+        console.log(`adding `, action.payload);
         state.strategies = [... action.payload];
         return { ...state};
     }

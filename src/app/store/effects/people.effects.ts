@@ -7,7 +7,7 @@ import {
     StartQuizPending,
     AssignmentAction,
 } from '../actions/people.actions';
-import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, withLatestFrom, tap } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { IParamsPeople, IPerson, IStrategy } from 'app/interfaces';
@@ -60,11 +60,11 @@ export class PeopleEffects {
         withLatestFrom(this.store$.select((state: IStore) => state.people)),
         // tslint:disable-next-line: typedef
         switchMap(([[_action, strategies], people]) =>
-            this.peopleService
-                .increaseStrategiesCounters(people, strategies)
-                .pipe(mergeMap((array: IStrategy[]) => [console.log(array), new AddStrategiesToExperiment(array)]))
-        ),
-        mergeMap(() => [new AssignmentAction()])
+            this.peopleService.increaseStrategiesCounters(people, strategies).pipe(
+                tap(array => [console.log(array), console.table(array)]),
+                mergeMap((array: IStrategy[]) => [new AddStrategiesToExperiment(array), new AssignmentAction()])
+            )
+        )
     );
 
     public constructor(

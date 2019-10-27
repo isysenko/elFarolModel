@@ -10,7 +10,7 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
     if (action instanceof StartQuizPending) {
         state = state.map((item: IPerson) => {
             let result: boolean;
-            item.strategy = checkStrategy(item, state);
+            item = checkStrategy(item, state);
             switch (item.strategy) {
                 case 0:
                     result = randomStrategy();
@@ -27,10 +27,10 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
             }
             return item;
         });
-        return [... state];
+        return Array.from(state);
     }
     if (action instanceof AddExperimentToList) {
-        state =  state.map((item: IPerson) => {
+        state = state.map((item: IPerson) => {
             if (action.payload.customers) {
                 const id: number | undefined = action.payload.customers.find((n: number) => n === item._id);
                 if (item.lastResults.length >= 5) {
@@ -42,7 +42,7 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
             }
             return item;
         });
-        return [... state];
+        return [...state];
     }
     return state;
 }
@@ -51,10 +51,9 @@ export function randomStrategy(): boolean {
     return Math.random() >= 0.5;
 }
 
-export function checkStrategy(person: IPerson, people: IPerson[]): number {
-    let strategyNumber: number = person.strategy;
+export function checkStrategy(person: IPerson, people: IPerson[]): IPerson {
     if (!person.lastResults.splice(3).includes(true)) {
-        strategyNumber = people[Math.floor(Math.random() * Math.floor(people.length))].strategy;
+        person.strategy = people[Math.floor(Math.random() * Math.floor(people.length))].strategy;
     }
-    return strategyNumber;
+    return {...person};
 }
