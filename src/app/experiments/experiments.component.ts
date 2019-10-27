@@ -26,9 +26,9 @@ export class ExperimentsComponent {
         { name: 'str8', value: true },
         { name: 'str9', value: true },
     ];
-    public barCapacity: string = '60';
-    public experimentsNumber: string = '100';
-    public peopleNumber: string = '100';
+    public barCapacity: string = '6';
+    public experimentsNumber: string = '10';
+    public peopleNumber: string = '10';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
@@ -57,7 +57,6 @@ export class ExperimentsComponent {
                 strategy.push({ name: this.strategies[i].name, index: i, count: 0 });
             }
         }
-        this._store.dispatch(new InitStrategies([...strategy]));
         this._store.dispatch(
             new InitPeoplePending({
                 nmbrPeople: Number(this.peopleNumber),
@@ -65,6 +64,7 @@ export class ExperimentsComponent {
             })
         );
         for (let i: number = 0; i < Number(this.experimentsNumber); i++) {
+            this._store.dispatch(new InitStrategies([...strategy]));
             this._store.dispatch(
                 new InitExperimentPending({
                     nmbrExperiments: Number(this.experimentsNumber),

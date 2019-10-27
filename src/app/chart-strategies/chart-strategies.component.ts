@@ -22,9 +22,9 @@ export class ChartStrategiesComponent implements OnInit {
                 this.chartData = [];
                 for (let i: number = 0; i < 10; i++) {
                     this.chartData.push({ data: [], label: i, borderWidth: 2, fill: false });
+                    this.chartLabels.push(i);
                 }
                 data.forEach((item: IExperiment) => {
-                    this.chartLabels.push(item._id);
                     if (item.strategies) {
                         item.strategies.forEach((str: IStrategy) => {
                             this.chartData[str.index].data.push(str.count);

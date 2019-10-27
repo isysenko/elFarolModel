@@ -40,8 +40,8 @@ export class StartQuizError {
 
 export class AssignmentAction {
     public readonly type: string = PeopleActions.ASSIGNMENT;
-    public constructor(public payload: number[]) {}
 }
+
 
 export type PeopleActionsTypes =
     | InitPeoplePending

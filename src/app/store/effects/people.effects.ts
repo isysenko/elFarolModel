@@ -5,8 +5,8 @@ import {
     PeopleActions,
     StartQuizError,
     StartQuizPending,
+    AssignmentAction,
 } from '../actions/people.actions';
-import { AssignmentAction } from './../actions/people.actions';
 import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -16,7 +16,6 @@ import { PeopleService } from 'app/experiments/people.servise';
 import { AddStrategiesToExperiment, StartQuizSuccess } from '../actions/experiment.actions';
 import { Store } from '@ngrx/store';
 import { IStore } from '..';
-import { InitStrategies } from '../actions/strategies.actions';
 
 @Injectable()
 export class PeopleEffects {
@@ -44,10 +43,7 @@ export class PeopleEffects {
         map((action: StartQuizPending) => action.payload),
         switchMap((people: IPerson[]) =>
             this.peopleService.startQuiz(people).pipe(
-                mergeMap((listPeople: number[]) => [
-                    new StartQuizSuccess(listPeople),
-                    new AssignmentAction(listPeople),
-                ]),
+                mergeMap((listPeople: number[]) => [new StartQuizSuccess(listPeople)]),
                 // tslint:disable-next-line: no-any
                 catchError((err: any) => {
                     console.error(err);
@@ -64,10 +60,11 @@ export class PeopleEffects {
         withLatestFrom(this.store$.select((state: IStore) => state.people)),
         // tslint:disable-next-line: typedef
         switchMap(([[_action, strategies], people]) =>
-            this.peopleService.increaseStrategiesCounters(people, [...strategies]).pipe(
-                mergeMap((array: IStrategy[]) => [new InitStrategies([]), new AddStrategiesToExperiment(array)])
-            )
-        )
+            this.peopleService
+                .increaseStrategiesCounters(people, strategies)
+                .pipe(mergeMap((array: IStrategy[]) => [console.log(array), new AddStrategiesToExperiment(array)]))
+        ),
+        mergeMap(() => [new AssignmentAction()])
     );
 
     public constructor(

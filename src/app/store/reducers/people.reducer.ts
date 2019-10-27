@@ -8,7 +8,7 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
         return action.payload;
     }
     if (action instanceof StartQuizPending) {
-        state.forEach((item: IPerson) => {
+        state = state.map((item: IPerson) => {
             let result: boolean;
             item.strategy = checkStrategy(item, state);
             switch (item.strategy) {
@@ -25,11 +25,12 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
             } else {
                 item.lastDecisions.push(result);
             }
+            return item;
         });
-        return state;
+        return [... state];
     }
     if (action instanceof AddExperimentToList) {
-        return state.map((item: IPerson) => {
+        state =  state.map((item: IPerson) => {
             if (action.payload.customers) {
                 const id: number | undefined = action.payload.customers.find((n: number) => n === item._id);
                 if (item.lastResults.length >= 5) {
@@ -41,6 +42,7 @@ export function peopleReducer(state: IPerson[] = initialState, action: PeopleAct
             }
             return item;
         });
+        return [... state];
     }
     return state;
 }

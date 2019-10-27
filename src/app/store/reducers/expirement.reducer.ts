@@ -9,10 +9,10 @@ export function experimentsReducer(
     if (action instanceof AddExperimentToList) {
         action.payload._id = state.length;
         state.push(action.payload);
-        return Array.from(state);
+        return [...state];
     }
     if (action.type === ExperimentsActions.RESET) {
-        return Array.from([]);
+        return [];
     }
     return state;
 }

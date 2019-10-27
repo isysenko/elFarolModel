@@ -14,12 +14,13 @@ export function currentExperimentReducer(state: IExperiment = initState, action:
     if (action instanceof StartQuizSuccess) {
         state.applicantsNumber = action.payload.length;
         action.payload.length = action.payload.length > state.barCapacity ? state.barCapacity : action.payload.length;
-        state.customers = Array.from(action.payload);
+        state.customers = [... action.payload];
         return state;
     }
     if (action instanceof AddStrategiesToExperiment) {
-        state.strategies = Array.from(action.payload);
-        return state;
+        console.log(`adding `,action.payload);
+        state.strategies = [... action.payload];
+        return { ...state};
     }
     return state;
 }

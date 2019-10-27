@@ -7,8 +7,5 @@ export function strategiesReducer(state: IStrategy[] = initialState, action: Str
     if (action.type === StrategiesActions.INIT_STRATEGIES) {
         return Array.from(action.payload);
     }
-    if (action.type === StrategiesActions.UPDATE_STRATEGIES) {
-        return Array.from(action.payload);
-    }
     return state;
 }
