@@ -1,4 +1,5 @@
-import { IExperiment, IStrategy, IPerson } from 'app/interfaces';
+import { IExperiment, IPerson, IStrategy } from '../interfaces';
+
 
 export class NewExperimentsService {
     public experiments: IExperiment[];
@@ -12,16 +13,10 @@ export class NewExperimentsService {
         peopleNumber: number
     ): IExperiment[] {
         let people: IPerson[] = this.generatePeoples(peopleNumber, str);
-        console.log('===================>');
-        console.log( 'people: ', people.slice());
-        for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber; experimentsCount++) {
-            const strategies: IStrategy[] = [...str];
-            console.log('strategies: ', strategies.slice());
+        for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
             const decidedToGO: number[] = this.startQuiz(people);
-            console.log('decidedToGO: ', decidedToGO.slice(), people.slice());
             const customers: number[] = [...decidedToGO];
             customers.length = customers.length > barCapacity ? barCapacity : customers.length;
-            console.log('customers: ', customers.slice());
             people = people.map((item: IPerson) => {
                 const id: number | undefined = customers.find((n: number) => n === item._id);
                 if (item.lastResults.length >= 5) {
@@ -32,15 +27,14 @@ export class NewExperimentsService {
                 }
                 return item;
             });
-            console.log('updated people: ', people.slice());
-            str = this.increaseStrategiesCounters(people, strategies);
-            console.log('updated strategy: ', str.slice());
-            let currentExperiment: IExperiment = {
+            console.log('updated strategy: ');
+            console.table(str);
+            const currentExperiment: IExperiment = {
                 _id: experimentsCount,
                 barCapacity,
                 customers,
                 applicantsNumber: decidedToGO.length,
-                strategies,
+                strategies: this.increaseStrategiesCounters(people),
             };
             console.log('currentExperiment: ', currentExperiment);
             this.experiments.push(currentExperiment);
@@ -65,8 +59,8 @@ export class NewExperimentsService {
             people.push({
                 _id: i,
                 friendsIds: this.getRandomArray(i),
-                lastDecisions: [],
-                lastResults: [],
+                lastDecisions: new Array(),
+                lastResults: new Array(),
                 coefficient: this.getRandomInt(5),
                 strategy: strategies[strategy.i].index,
             });
@@ -119,21 +113,19 @@ export class NewExperimentsService {
         return this.shuffle(list);
     }
 
-    private increaseStrategiesCounters(people: IPerson[], strategy: IStrategy[]): IStrategy[] {
-        strategy = strategy.map((i: IStrategy) => {
-            i.count = 0;
-            return i;
-        });
-
-        const res: IStrategy[] = [...strategy];
+    private increaseStrategiesCounters(people: IPerson[]): IStrategy[] {
+        const strategy: IStrategy[] = [];
+        for (let i: number = 0; i < 10; i++) {
+            strategy.push({ name: i.toString(), index: i, count: 0 });
+        }
         for (let i: number = 0; i < people.length; i++) {
-            for (let j: number = 0; j < res.length; j++) {
-                if (people[i].strategy === res[j].index) {
-                    res[j].count++;
+            for (let j: number = 0; j < strategy.length; j++) {
+                if (people[i].strategy === strategy[j].index) {
+                    strategy[j].count++;
                 }
             }
         }
-        return res;
+        return strategy;
     }
 
     private shuffle(a: number[]): number[] {

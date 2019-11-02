@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { IStore } from 'app/store';
-import { IExperiment, IStrategy } from 'app/interfaces';
+import { IStore } from '../store';
+import { IExperiment, IStrategy } from '../interfaces';
 @Component({
     selector: 'app-chart-strategies',
     templateUrl: './chart-strategies.component.html',

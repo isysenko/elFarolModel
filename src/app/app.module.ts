@@ -10,13 +10,8 @@ import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/ma
 import { ExperimentsComponent } from './experiments/experiments.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './store';
-import { environment } from 'environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EffectsModule } from '@ngrx/effects';
-import { effects } from './store/effects';
-import { ExperimentsService } from './experiments/experiments.servise';
-import { PeopleService } from './experiments/people.servise';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartStrategiesComponent } from './chart-strategies/chart-strategies.component';
@@ -40,12 +35,11 @@ import { ChartStrategiesComponent } from './chart-strategies/chart-strategies.co
     MatInputModule,
     MatButtonModule,
     StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot(effects),
+    StoreDevtoolsModule.instrument({ maxAge: 25 }),
     ChartsModule,
     FlexLayoutModule
   ],
-  providers: [ExperimentsService, PeopleService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
