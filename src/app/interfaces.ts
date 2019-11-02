@@ -2,7 +2,7 @@ export interface IExperiment {
     _id: number;
     barCapacity: number;
     customers?: number[];
-    applicantsNumber?: number;
+    applicantsNumber: number;
     strategies?: IStrategy[];
 }
 

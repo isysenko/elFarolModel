@@ -15,19 +15,19 @@ export class ExperimentsComponent {
     // tslint:disable-next-line: no-any
     public strategies: any[] = [
         { name: 'Random (0)', value: true },
-        { name: 'str1', value: true },
-        { name: 'str2', value: true },
-        { name: 'str3', value: true },
-        { name: 'str4', value: true },
+        { name: 'если все друзья идут', value: true },
+        { name: 'если хоть кто-то из друзей идет', value: true },
+        { name: 'если в прошлый раз он не пошел или пошел и бар не был переполнен', value: true },
+        { name: 'ходит в баз через раз', value: true },
         { name: 'str5', value: true },
         { name: 'str6', value: true },
         { name: 'str7', value: true },
         { name: 'str8', value: true },
         { name: 'str9', value: true },
     ];
-    public barCapacity: string = '60';
-    public experimentsNumber: string = '100';
-    public peopleNumber: string = '100';
+    public barCapacity: string = '6';
+    public experimentsNumber: string = '10';
+    public peopleNumber: string = '10';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;

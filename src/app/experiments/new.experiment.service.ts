@@ -1,4 +1,5 @@
 import { IExperiment, IPerson, IStrategy } from '../interfaces';
+import { companyStrategy, randomStrategy, oneFromCompanyStrategy, everyThreeStrategy, notOverfullStrategy } from './strategies';
 
 
 export class NewExperimentsService {
@@ -14,7 +15,15 @@ export class NewExperimentsService {
     ): IExperiment[] {
         let people: IPerson[] = this.generatePeoples(peopleNumber, str);
         for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
-            const decidedToGO: number[] = this.startQuiz(people);
+            let overfull: boolean = false;
+            if (experimentsCount > 0 && this.experiments[experimentsCount - 1].applicantsNumber !== undefined) {
+                const n: number = this.experiments[experimentsCount - 1].applicantsNumber ?
+                    this.experiments[experimentsCount - 1].applicantsNumber :
+                    0;
+                overfull = n > this.experiments[experimentsCount - 1].barCapacity;
+            }
+
+            const decidedToGO: number[] = this.startQuiz(people, overfull);
             const customers: number[] = [...decidedToGO];
             customers.length = customers.length > barCapacity ? barCapacity : customers.length;
             people = people.map((item: IPerson) => {
@@ -27,18 +36,14 @@ export class NewExperimentsService {
                 }
                 return item;
             });
-            console.log('updated strategy: ');
-            console.table(str);
             const currentExperiment: IExperiment = {
                 _id: experimentsCount,
                 barCapacity,
                 customers,
                 applicantsNumber: decidedToGO.length,
-                strategies: this.increaseStrategiesCounters(people),
+                strategies: this.increaseStrategiesCounters(people, str),
             };
-            console.log('currentExperiment: ', currentExperiment);
             this.experiments.push(currentExperiment);
-            console.log('experiments: ', this.experiments.slice());
         }
 
         return this.experiments;
@@ -84,7 +89,7 @@ export class NewExperimentsService {
         }
         return arr;
     }
-    private startQuiz(people: IPerson[]): number[] {
+    private startQuiz(people: IPerson[], lastExpbarOverfull: boolean): number[] {
         const list: number[] = [];
         people = people.map((item: IPerson) => {
             let result: boolean;
@@ -92,6 +97,18 @@ export class NewExperimentsService {
             switch (item.strategy) {
                 case 0:
                     result = randomStrategy();
+                    break;
+                case 1:
+                    result = companyStrategy(item, people);
+                    break;
+                case 2:
+                    result = oneFromCompanyStrategy(item, people);
+                    break;
+                case 3:
+                    result = notOverfullStrategy(item, lastExpbarOverfull);
+                    break;
+                case 4:
+                    result = everyThreeStrategy(item);
                     break;
                 default:
                     result = randomStrategy();
@@ -113,8 +130,9 @@ export class NewExperimentsService {
         return this.shuffle(list);
     }
 
-    private increaseStrategiesCounters(people: IPerson[]): IStrategy[] {
-        const strategy: IStrategy[] = [];
+    private increaseStrategiesCounters(people: IPerson[], str: IStrategy[]): IStrategy[] {
+        const strategy: IStrategy[] = [...str];
+        strategy.forEach((el: IStrategy) => el.count = 0);
         for (let i: number = 0; i < 10; i++) {
             strategy.push({ name: i.toString(), index: i, count: 0 });
         }
@@ -136,13 +154,12 @@ export class NewExperimentsService {
         return a;
     }
 }
-export function randomStrategy(): boolean {
-    return Math.random() >= 0.5;
-}
 
 export function checkStrategy(person: IPerson, people: IPerson[]): IPerson {
-    if (!person.lastResults.splice(3).includes(true)) {
+    if (!person.lastResults.splice(person.coefficient).includes(true)) {
         person.strategy = people[Math.floor(Math.random() * Math.floor(people.length))].strategy;
+        console.log(person.strategy);
+        // переписать, выбирается любос 0 до 10 вне зависомти стоит галочка или нет
     }
     return { ...person };
 }
