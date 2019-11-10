@@ -14,7 +14,7 @@ import { AddExperimentToList, ResetStore } from '../store/actions/experiment.act
 export class ExperimentsComponent {
     // tslint:disable-next-line: no-any
     public strategies: any[] = [
-        { name: 'Random (0)', value: true },
+        { name: 'Монетка решает (0)', value: true },
         { name: 'Если все друзья идут (1)', value: true },
         { name: 'Если хоть кто-то из друзей идет (2)', value: true },
         { name: 'Если в прошлый раз он не пошел или пошел и бар не был переполнен (3)', value: true },
@@ -23,7 +23,7 @@ export class ExperimentsComponent {
         { name: 'Если бар дорогой (6)', value: true },
         { name: 'Если бар дешевый (7)', value: true },
         { name: 'Если бар не дорогой (8)', value: true },
-        { name: 'str9', value: true },
+        { name: 'Eсли не доpoгой и в прошлый раз попал (9)', value: true },
     ];
     public barCapacity: string = '60';
     public experimentsNumber: string = '100';

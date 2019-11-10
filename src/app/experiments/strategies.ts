@@ -52,19 +52,21 @@ export function alwaysTrueStrategy(): boolean {
     return true;
 }
 
-//если дорогой
+// если дорогой
 export function ifExpensiveStrategy(price: string): boolean {
-    console.log(price);
     return price === 'expensive';
 }
 
-//если дешевый
+// если дешевый
 export function ifInexpensiveStrategy(price: string): boolean {
-    console.log(price);
     return price === 'inexpensive';
 }
-//если не доpoгой
+
+// если не доpoгой
 export function ifNotExpensiveStrategy(price: string): boolean {
-    console.log(price);
     return price !== 'expensive';
+}
+// если не доpoгой и в прошлый раз попал
+export function ifNotExpensive2Strategy(price: string, person: IPerson): boolean {
+    return price !== 'expensive' && person.lastResults[person.lastResults.length - 1];
 }

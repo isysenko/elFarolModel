@@ -18,7 +18,6 @@ export class ChartStrategiesComponent implements OnInit {
     public ngOnInit(): void {
         this._store.pipe(select('experiments')).subscribe((data: IExperiment[]) => {
             if (data) {
-                console.log(data.length);
                 this.chartLabels = [];
                 this.chartData = [];
                 for (let i: number = 0; i < 10; i++) {

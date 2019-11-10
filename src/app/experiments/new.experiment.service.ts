@@ -3,12 +3,13 @@ import {
     alwaysTrueStrategy,
     companyStrategy,
     everyThreeStrategy,
+    ifExpensiveStrategy,
+    ifInexpensiveStrategy,
+    ifNotExpensive2Strategy,
+    ifNotExpensiveStrategy,
     notOverfullStrategy,
     oneFromCompanyStrategy,
     randomStrategy,
-    ifExpensiveStrategy,
-    ifNotExpensiveStrategy,
-    ifInexpensiveStrategy,
 } from './strategies';
 
 export class NewExperimentsService {
@@ -25,7 +26,6 @@ export class NewExperimentsService {
         let people: IPerson[] = this.generatePeoples(peopleNumber, str);
         let barPrice: string = 'inexpensive';
         for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
-            console.log('=====>', experimentsCount);
             let overfull: boolean = false;
             if (experimentsCount > 0 && this.experiments[experimentsCount - 1].applicantsNumber !== undefined) {
                 const n: number = this.experiments[experimentsCount - 1].applicantsNumber
@@ -62,7 +62,8 @@ export class NewExperimentsService {
                     this.experiments.length
                 );
                 const arr: number[] = sliceExp.map((exp: IExperiment) => exp.applicantsNumber - exp.barCapacity);
-                let res = [[false, false, false], [false, false, false]];
+                // tslint:disable-next-line: no-any
+                const res: any = [[false, false, false], [false, false, false]];
                 for (let i: number = 0; i < 4; i++) {
                     if (arr[i] > 10) {
                         res[0][i] = true;
@@ -162,6 +163,9 @@ export class NewExperimentsService {
                     break;
                 case 8:
                     result = ifNotExpensiveStrategy(barPrice);
+                    break;
+                case 9:
+                    result = ifNotExpensive2Strategy(barPrice, item);
                     break;
                 default:
                     result = randomStrategy();

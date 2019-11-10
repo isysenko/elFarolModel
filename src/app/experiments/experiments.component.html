@@ -39,6 +39,7 @@
         <h3>Experiment {{ item._id }}</h3>
         <span *ngFor="let customer of item.customers"> {{ customer }}, </span><br />
         <span class="crowded" *ngIf="item.applicantsNumber > item.barCapacity"> crowded</span>
+        <span> {{ item.barPrice }}</span><br />
     </div>
 </div>
 <app-chart-strategies *ngIf="ifExpRun"></app-chart-strategies>
