@@ -4,6 +4,7 @@ export interface IExperiment {
     customers?: number[];
     applicantsNumber: number;
     strategies?: IStrategy[];
+    barPrice: string;
 }
 
 export interface IParamsExperiments {

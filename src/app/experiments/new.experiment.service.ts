@@ -6,6 +6,9 @@ import {
     notOverfullStrategy,
     oneFromCompanyStrategy,
     randomStrategy,
+    ifExpensiveStrategy,
+    ifNotExpensiveStrategy,
+    ifInexpensiveStrategy,
 } from './strategies';
 
 export class NewExperimentsService {
@@ -20,7 +23,9 @@ export class NewExperimentsService {
         peopleNumber: number
     ): IExperiment[] {
         let people: IPerson[] = this.generatePeoples(peopleNumber, str);
+        let barPrice: string = 'inexpensive';
         for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
+            console.log('=====>', experimentsCount);
             let overfull: boolean = false;
             if (experimentsCount > 0 && this.experiments[experimentsCount - 1].applicantsNumber !== undefined) {
                 const n: number = this.experiments[experimentsCount - 1].applicantsNumber
@@ -29,12 +34,12 @@ export class NewExperimentsService {
                 overfull = n > this.experiments[experimentsCount - 1].barCapacity;
             }
 
-            const decidedToGO: number[] = this.startQuiz(people, overfull, str);
+            const decidedToGO: number[] = this.startQuiz(people, overfull, str, barPrice);
             const customers: number[] = [...decidedToGO];
             customers.length = customers.length > barCapacity ? barCapacity : customers.length;
             people = people.map((item: IPerson) => {
                 const id: number | undefined = customers.find((n: number) => n === item._id);
-                if (item.lastResults.length >= 5) {
+                if (item.lastResults.length >= 10) {
                     item.lastResults.shift();
                     item.lastResults.push(id === 0 ? true : !!id);
                 } else {
@@ -45,11 +50,37 @@ export class NewExperimentsService {
             const currentExperiment: IExperiment = {
                 _id: experimentsCount,
                 barCapacity,
+                barPrice,
                 customers,
                 applicantsNumber: decidedToGO.length,
                 strategies: this.increaseStrategiesCounters(people, str),
             };
             this.experiments.push(currentExperiment);
+            if (this.experiments.length > 4) {
+                const sliceExp: IExperiment[] = this.experiments.slice(
+                    this.experiments.length - 3,
+                    this.experiments.length
+                );
+                const arr: number[] = sliceExp.map((exp: IExperiment) => exp.applicantsNumber - exp.barCapacity);
+                let res = [[false, false, false], [false, false, false]];
+                for (let i: number = 0; i < 4; i++) {
+                    if (arr[i] > 10) {
+                        res[0][i] = true;
+                    }
+                    if (arr[i] < -10) {
+                        res[1][i] = true;
+                    }
+                }
+                if (!res[0].includes(false)) {
+                    barPrice = 'expensive';
+                } else {
+                    if (!res[1].includes(false)) {
+                        barPrice = 'inexpensive';
+                    } else {
+                        barPrice = 'medium';
+                    }
+                }
+            }
         }
 
         return this.experiments;
@@ -76,7 +107,7 @@ export class NewExperimentsService {
                 friendsIds: this.getRandomArray(i),
                 lastDecisions: new Array(),
                 lastResults: new Array(),
-                coefficient: this.getRandomInt(3),
+                coefficient: this.getRandomInt(9),
                 strategy: x,
                 badStrategies: [],
             });
@@ -99,7 +130,7 @@ export class NewExperimentsService {
         }
         return arr;
     }
-    private startQuiz(people: IPerson[], lastExpbarOverfull: boolean, str: IStrategy[]): number[] {
+    private startQuiz(people: IPerson[], lastExpbarOverfull: boolean, str: IStrategy[], barPrice: string): number[] {
         const list: number[] = [];
         people = people.map((item: IPerson) => {
             let result: boolean;
@@ -123,11 +154,20 @@ export class NewExperimentsService {
                 case 5:
                     result = alwaysTrueStrategy();
                     break;
+                case 6:
+                    result = ifExpensiveStrategy(barPrice);
+                    break;
+                case 7:
+                    result = ifInexpensiveStrategy(barPrice);
+                    break;
+                case 8:
+                    result = ifNotExpensiveStrategy(barPrice);
+                    break;
                 default:
                     result = randomStrategy();
                     break;
             }
-            if (item.lastDecisions.length >= 5) {
+            if (item.lastDecisions.length >= 10) {
                 item.lastDecisions.shift();
                 item.lastDecisions.push(result);
             } else {
@@ -171,7 +211,7 @@ export class NewExperimentsService {
 export function checkStrategy(person: IPerson, strategies: IStrategy[]): IPerson {
     const start: number =
         person.coefficient >= person.lastResults.length ? 0 : person.lastResults.length - person.coefficient - 1;
-    if (!person.lastResults.slice(start, person.lastResults.length).includes(true)) {
+    if (!person.lastResults[start]) {
         let strLength: number = 0;
         strategies.forEach((item: IStrategy) => {
             if (item.checked) {
@@ -183,11 +223,12 @@ export function checkStrategy(person: IPerson, strategies: IStrategy[]): IPerson
         }
         let x: number = Math.floor(Math.random() * (strategies.length - 1));
         person.badStrategies.push(person.strategy);
-
+        let count: number = 0;
         while (
-            !strategies[x].checked ||
-            (person.badStrategies.includes(strategies[x].index) && strategies[x].checked)
+            count <= 100 &&
+            (!strategies[x].checked || (person.badStrategies.includes(strategies[x].index) && strategies[x].checked))
         ) {
+            count += 1;
             x = Math.floor(Math.random() * (strategies.length - 1));
         }
         person.strategy = strategies[x].index;

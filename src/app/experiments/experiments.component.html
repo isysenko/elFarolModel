@@ -32,7 +32,7 @@
     </div>
 </mat-card>
 <h2 *ngIf="ifExpRun">Results</h2>
-<app-chart></app-chart>
+<app-chart *ngIf="ifExpRun"></app-chart>
 <button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfo()">More information</button>
 <div *ngIf="ifExpRun && showMore">
     <div *ngFor="let item of experiments$ | async">
@@ -41,7 +41,7 @@
         <span class="crowded" *ngIf="item.applicantsNumber > item.barCapacity"> crowded</span>
     </div>
 </div>
-<app-chart-strategies></app-chart-strategies>
+<app-chart-strategies *ngIf="ifExpRun"></app-chart-strategies>
 <button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfoStrategy()">More information</button>
 <div *ngIf="ifExpRun && showMoreStrategy">
     <div *ngFor="let item of experiments$ | async">

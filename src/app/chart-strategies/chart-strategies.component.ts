@@ -18,14 +18,15 @@ export class ChartStrategiesComponent implements OnInit {
     public ngOnInit(): void {
         this._store.pipe(select('experiments')).subscribe((data: IExperiment[]) => {
             if (data) {
+                console.log(data.length);
                 this.chartLabels = [];
                 this.chartData = [];
                 for (let i: number = 0; i < 10; i++) {
                     this.chartData.push({ data: [], label: i, borderWidth: 2, fill: false });
-                    this.chartLabels.push(i);
                 }
                 data.forEach((item: IExperiment) => {
                     if (item.strategies) {
+                        this.chartLabels.push(item._id);
                         item.strategies.forEach((str: IStrategy) => {
                             this.chartData[str.index].data.push(str.count);
                         });

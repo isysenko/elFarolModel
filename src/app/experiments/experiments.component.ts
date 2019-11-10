@@ -15,19 +15,19 @@ export class ExperimentsComponent {
     // tslint:disable-next-line: no-any
     public strategies: any[] = [
         { name: 'Random (0)', value: true },
-        { name: 'если все друзья идут (1)', value: true },
-        { name: 'если хоть кто-то из друзей идет (2)', value: true },
-        { name: 'если в прошлый раз он не пошел или пошел и бар не был переполнен (3)', value: true },
-        { name: 'ходит в баз через раз (4)', value: true },
-        { name: 'всегда говори да', value: true },
-        { name: 'str6', value: true },
-        { name: 'str7', value: true },
-        { name: 'str8', value: true },
+        { name: 'Если все друзья идут (1)', value: true },
+        { name: 'Если хоть кто-то из друзей идет (2)', value: true },
+        { name: 'Если в прошлый раз он не пошел или пошел и бар не был переполнен (3)', value: true },
+        { name: 'Через раз (4)', value: true },
+        { name: 'Всегда да (5)', value: true },
+        { name: 'Если бар дорогой (6)', value: true },
+        { name: 'Если бар дешевый (7)', value: true },
+        { name: 'Если бар не дорогой (8)', value: true },
         { name: 'str9', value: true },
     ];
-    public barCapacity: string = '6';
-    public experimentsNumber: string = '10';
-    public peopleNumber: string = '10';
+    public barCapacity: string = '60';
+    public experimentsNumber: string = '100';
+    public peopleNumber: string = '100';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
@@ -68,8 +68,6 @@ export class ExperimentsComponent {
     }
     public reset(): void {
         this.ifExpRun = !this.ifExpRun;
-        this.showMore = !this.showMore;
-        this.showMoreStrategy = !this.showMoreStrategy;
         this._store.dispatch(new ResetStore());
     }
 }
