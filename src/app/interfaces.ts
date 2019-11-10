@@ -18,6 +18,7 @@ export interface IPerson {
     lastResults: boolean[];
     coefficient: number;
     strategy: number;
+    badStrategies: number[];
 }
 
 export interface IParamsPeople {
@@ -28,4 +29,5 @@ export interface IStrategy {
     index: number;
     name: string;
     count: number;
+    checked: boolean;
 }

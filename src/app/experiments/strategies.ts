@@ -11,7 +11,6 @@ export function companyStrategy(person: IPerson, people: IPerson[]): boolean {
     if (person.friendsIds.length > 0) {
         person.friendsIds.forEach((el: number) => {
             if (people[el].lastDecisions[people[el].lastDecisions.length - 1] === false) {
-                console.log("1 !!!!!");
                 res = false;
             }
         });
@@ -25,7 +24,6 @@ export function oneFromCompanyStrategy(person: IPerson, people: IPerson[]): bool
     if (person.friendsIds.length > 0) {
         person.friendsIds.forEach((el: number) => {
             if (people[el].lastDecisions[people[el].lastDecisions.length - 1] === true) {
-                console.log("2 !!!!!");
                 res = true;
             }
         });
@@ -35,10 +33,10 @@ export function oneFromCompanyStrategy(person: IPerson, people: IPerson[]): bool
 
 // если в прошлый раз он не пошел или пошел и бар не был переполнен
 export function notOverfullStrategy(person: IPerson, lastExpbarOverfull: boolean): boolean {
-    console.log("3 !!!!!");
-    if ((person.lastDecisions[person.lastDecisions.length - 1]
-        && !lastExpbarOverfull) ||
-        !person.lastDecisions[person.lastDecisions.length - 1]) {
+    if (
+        (person.lastDecisions[person.lastDecisions.length - 1] && !lastExpbarOverfull) ||
+        !person.lastDecisions[person.lastDecisions.length - 1]
+    ) {
         return true;
     }
     return false;
@@ -46,8 +44,10 @@ export function notOverfullStrategy(person: IPerson, lastExpbarOverfull: boolean
 
 // ходит в баз через раз
 export function everyThreeStrategy(person: IPerson): boolean {
-    console.log("4 !!!!!");
     return !person.lastDecisions[person.lastDecisions.length - 1];
 }
 
-//
+//всегда говори да
+export function alwaysTrueStrategy(): boolean {
+    return true;
+}

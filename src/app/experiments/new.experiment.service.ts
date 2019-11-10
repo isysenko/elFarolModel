@@ -1,6 +1,12 @@
 import { IExperiment, IPerson, IStrategy } from '../interfaces';
-import { companyStrategy, randomStrategy, oneFromCompanyStrategy, everyThreeStrategy, notOverfullStrategy } from './strategies';
-
+import {
+    alwaysTrueStrategy,
+    companyStrategy,
+    everyThreeStrategy,
+    notOverfullStrategy,
+    oneFromCompanyStrategy,
+    randomStrategy,
+} from './strategies';
 
 export class NewExperimentsService {
     public experiments: IExperiment[];
@@ -17,13 +23,13 @@ export class NewExperimentsService {
         for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
             let overfull: boolean = false;
             if (experimentsCount > 0 && this.experiments[experimentsCount - 1].applicantsNumber !== undefined) {
-                const n: number = this.experiments[experimentsCount - 1].applicantsNumber ?
-                    this.experiments[experimentsCount - 1].applicantsNumber :
-                    0;
+                const n: number = this.experiments[experimentsCount - 1].applicantsNumber
+                    ? this.experiments[experimentsCount - 1].applicantsNumber
+                    : 0;
                 overfull = n > this.experiments[experimentsCount - 1].barCapacity;
             }
 
-            const decidedToGO: number[] = this.startQuiz(people, overfull);
+            const decidedToGO: number[] = this.startQuiz(people, overfull, str);
             const customers: number[] = [...decidedToGO];
             customers.length = customers.length > barCapacity ? barCapacity : customers.length;
             people = people.map((item: IPerson) => {
@@ -61,13 +67,18 @@ export class NewExperimentsService {
                 strategy.counter = 1;
                 strategy.i++;
             }
+            let x: number = Math.floor(Math.random() * (strategies.length - 1));
+            while (!strategies[x].checked) {
+                x = Math.floor(Math.random() * (strategies.length - 1));
+            }
             people.push({
                 _id: i,
                 friendsIds: this.getRandomArray(i),
                 lastDecisions: new Array(),
                 lastResults: new Array(),
-                coefficient: this.getRandomInt(5),
-                strategy: strategies[strategy.i].index,
+                coefficient: this.getRandomInt(3),
+                strategy: x,
+                badStrategies: [],
             });
             strategy.counter++;
         }
@@ -78,22 +89,21 @@ export class NewExperimentsService {
     }
     private getRandomArray(id: number): number[] {
         const arr: number[] = [];
-        const max: number = id > 3 ? 3 : id;
-        const nmbr: number = Math.floor(Math.random() * Math.floor(max));
+        const max: number = id > 3 ? 2 : id - 1;
+        const nmbr: number = this.getRandomInt(max);
         for (let i: number = 0; i <= nmbr; i++) {
-            let ins: number = Math.floor(Math.random() * Math.floor(id - 1));
-            ins = Math.floor(Math.random() * Math.floor(id));
-            if (ins !== id) {
+            const ins: number = this.getRandomInt(id);
+            if (!arr.includes(ins)) {
                 arr.push(ins);
             }
         }
         return arr;
     }
-    private startQuiz(people: IPerson[], lastExpbarOverfull: boolean): number[] {
+    private startQuiz(people: IPerson[], lastExpbarOverfull: boolean, str: IStrategy[]): number[] {
         const list: number[] = [];
         people = people.map((item: IPerson) => {
             let result: boolean;
-            item = checkStrategy(item, people);
+            item = checkStrategy(item, str);
             switch (item.strategy) {
                 case 0:
                     result = randomStrategy();
@@ -109,6 +119,9 @@ export class NewExperimentsService {
                     break;
                 case 4:
                     result = everyThreeStrategy(item);
+                    break;
+                case 5:
+                    result = alwaysTrueStrategy();
                     break;
                 default:
                     result = randomStrategy();
@@ -132,9 +145,9 @@ export class NewExperimentsService {
 
     private increaseStrategiesCounters(people: IPerson[], str: IStrategy[]): IStrategy[] {
         const strategy: IStrategy[] = [...str];
-        strategy.forEach((el: IStrategy) => el.count = 0);
+        strategy.forEach((el: IStrategy) => (el.count = 0));
         for (let i: number = 0; i < 10; i++) {
-            strategy.push({ name: i.toString(), index: i, count: 0 });
+            strategy.push({ name: i.toString(), index: i, count: 0, checked: str[i].checked });
         }
         for (let i: number = 0; i < people.length; i++) {
             for (let j: number = 0; j < strategy.length; j++) {
@@ -155,11 +168,29 @@ export class NewExperimentsService {
     }
 }
 
-export function checkStrategy(person: IPerson, people: IPerson[]): IPerson {
-    if (!person.lastResults.splice(person.coefficient).includes(true)) {
-        person.strategy = people[Math.floor(Math.random() * Math.floor(people.length))].strategy;
-        console.log(person.strategy);
-        // переписать, выбирается любос 0 до 10 вне зависомти стоит галочка или нет
+export function checkStrategy(person: IPerson, strategies: IStrategy[]): IPerson {
+    const start: number =
+        person.coefficient >= person.lastResults.length ? 0 : person.lastResults.length - person.coefficient - 1;
+    if (!person.lastResults.slice(start, person.lastResults.length).includes(true)) {
+        let strLength: number = 0;
+        strategies.forEach((item: IStrategy) => {
+            if (item.checked) {
+                strLength += 1;
+            }
+        });
+        if (strLength === person.badStrategies.length + 1) {
+            person.badStrategies = new Array();
+        }
+        let x: number = Math.floor(Math.random() * (strategies.length - 1));
+        person.badStrategies.push(person.strategy);
+
+        while (
+            !strategies[x].checked ||
+            (person.badStrategies.includes(strategies[x].index) && strategies[x].checked)
+        ) {
+            x = Math.floor(Math.random() * (strategies.length - 1));
+        }
+        person.strategy = strategies[x].index;
     }
     return { ...person };
 }
