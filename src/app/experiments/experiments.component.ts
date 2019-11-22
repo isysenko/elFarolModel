@@ -15,15 +15,15 @@ export class ExperimentsComponent {
     // tslint:disable-next-line: no-any
     public strategies: any[] = [
         { name: 'Монетка вирішить (0)', value: true },
-        { name: 'Якщо ідуть усі друзі (1)', value: true },
+        { name: 'Якщо йдуть усі друзі (1)', value: true },
         { name: 'Якщо хоч хтось із друзів іде (2)', value: true },
         { name: 'Якщо минулого разу не пішов або пішов і був задоволеним (3)', value: true },
         { name: 'Через раз (4)', value: true },
-        { name: 'Завжди іти (5)', value: true },
+        { name: 'Завжди йти (5)', value: true },
         { name: 'Якщо бар дорогий (6)', value: true },
         { name: 'Якщо бар дешевий (7)', value: true },
         { name: 'Якщо бар не дорогий (8)', value: true },
-        { name: 'Якщо бар не дорогий и минулого разу лишився задоволеним (9)', value: true },
+        { name: 'Якщо бар не дорогий і минулого разу залишився задоволеним (9)', value: true },
     ];
     public barCapacity: string = '60';
     public experimentsNumber: string = '100';
@@ -45,9 +45,9 @@ export class ExperimentsComponent {
         const strategy: IStrategy[] = [];
         for (let i: number = 0; i < this.strategies.length; i++) {
             if (this.strategies[i].value) {
-                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: true });
+                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: true});
             } else {
-                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: false });
+                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: false});
             }
         }
         const experimentsToList: IExperiment[] = exp.startExperiments(

@@ -64,7 +64,7 @@ export function ifInexpensiveStrategy(price: string): boolean {
 
 // если не доpoгой
 export function ifNotExpensiveStrategy(price: string): boolean {
-    return price !== 'expensive';
+    return price !== 'expensive' && Math.floor(Math.random() * 10) > 3;
 }
 // если не доpoгой и в прошлый раз попал
 export function ifNotExpensive2Strategy(price: string, person: IPerson): boolean {

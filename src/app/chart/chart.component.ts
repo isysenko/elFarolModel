@@ -21,9 +21,9 @@ export class ChartComponent implements OnInit {
     public ngOnInit(): void {
         this._store.pipe(select('experiments')).subscribe((data: IExperiment[]) => {
             if (data) {
-              this.chartLabels = [];
-              this.chartData[0].data = [];
-              this.chartData[1].data = [];
+                this.chartLabels = [];
+                this.chartData[0].data = [];
+                this.chartData[1].data = [];
                 data.forEach((item: IExperiment) => {
                     this.chartLabels.push(item._id);
                     this.chartData[1].data.push(item.barCapacity);
