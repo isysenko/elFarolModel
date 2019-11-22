@@ -1,7 +1,7 @@
 <mat-card>
     <div class="settings" fxLayout="row" fxLayoutGap="100px">
         <div class="strategies">
-            <h2>Strategies</h2>
+            <h2>Стратегії</h2>
             <mat-card-content>
                 <section class="strategies-section">
                     <li *ngFor="let item of strategies; index as i">
@@ -12,41 +12,41 @@
         </div>
         <section fxLayout="column" class="settings-section">
             <mat-form-field>
-                <h2>Bar capacity</h2>
+                <h2>Місткість бару</h2>
                 <input matInput [(ngModel)]="barCapacity" />
             </mat-form-field>
             <mat-form-field>
-                <h2>Number of experiments</h2>
+                <h2>Кількість експериментів</h2>
                 <input matInput [(ngModel)]="experimentsNumber" />
             </mat-form-field>
             <mat-form-field>
-                <h2>Number of people</h2>
+                <h2>Кількість людей</h2>
                 <input matInput [(ngModel)]="peopleNumber" />
             </mat-form-field>
         </section>
     </div>
 
     <div class="buttons" fxLayout="row" fxLayoutGap="150px">
-        <button mat-raised-button color="accent" (click)="runExperiments()">Run experiments</button>
-        <button mat-raised-button color="accent" (click)="reset()">Reset</button>
+        <button mat-raised-button color="accent" (click)="runExperiments()">Почати експерименти</button>
+        <button mat-raised-button color="accent" (click)="reset()">Очистити</button>
     </div>
 </mat-card>
-<h2 *ngIf="ifExpRun">Results</h2>
+<h2 *ngIf="ifExpRun">Результати</h2>
 <app-chart *ngIf="ifExpRun"></app-chart>
-<button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfo()">More information</button>
+<button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfo()">Детальніше</button>
 <div *ngIf="ifExpRun && showMore">
     <div *ngFor="let item of experiments$ | async">
         <h3>Experiment {{ item._id }}</h3>
         <span *ngFor="let customer of item.customers"> {{ customer }}, </span><br />
-        <span class="crowded" *ngIf="item.applicantsNumber > item.barCapacity"> crowded</span>
+        <span class="crowded" *ngIf="item.applicantsNumber > item.barCapacity"> переповнений</span>
         <span> {{ item.barPrice }}</span><br />
     </div>
 </div>
 <app-chart-strategies *ngIf="ifExpRun"></app-chart-strategies>
-<button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfoStrategy()">More information</button>
+<button *ngIf="ifExpRun" mat-raised-button color="accent" (click)="showMoreInfoStrategy()">Детальніше</button>
 <div *ngIf="ifExpRun && showMoreStrategy">
     <div *ngFor="let item of experiments$ | async">
-        <h3>Experiment {{ item._id }}</h3>
+        <h3>Експеримент {{ item._id }}</h3>
         <span *ngFor="let str of item.strategies"> {{ str.index }}: {{ str.count }} , </span><br />
     </div>
 </div>

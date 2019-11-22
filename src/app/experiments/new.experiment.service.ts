@@ -135,7 +135,7 @@ export class NewExperimentsService {
         const list: number[] = [];
         people = people.map((item: IPerson) => {
             let result: boolean;
-            item = checkStrategy(item, str);
+            item = checkStrategy(item, str, lastExpbarOverfull);
             switch (item.strategy) {
                 case 0:
                     result = randomStrategy();
@@ -212,7 +212,31 @@ export class NewExperimentsService {
     }
 }
 
-export function checkStrategy(person: IPerson, strategies: IStrategy[]): IPerson {
+export function checkStrategy(person: IPerson, strategies: IStrategy[], lastTimeOverfull: boolean): IPerson {
+    if (
+        lastTimeOverfull &&
+        person.lastDecisions[person.lastDecisions.length - 1] &&
+        person.lastResults[person.lastResults.length - 1] &&
+        person.coefficient > 0
+    ) {
+        person.coefficient--;
+    }
+    if (
+        lastTimeOverfull &&
+        person.lastDecisions[person.lastDecisions.length - 1] &&
+        !person.lastResults[person.lastResults.length - 1] &&
+        person.coefficient > 1
+    ) {
+        person.coefficient -= 2;
+    }
+    if (
+        !lastTimeOverfull &&
+        person.lastDecisions[person.lastDecisions.length - 1] &&
+        person.lastResults[person.lastResults.length - 1] &&
+        person.coefficient < 8
+    ) {
+        person.coefficient += 1;
+    }
     const start: number =
         person.coefficient >= person.lastResults.length ? 0 : person.lastResults.length - person.coefficient - 1;
     if (!person.lastResults[start]) {
