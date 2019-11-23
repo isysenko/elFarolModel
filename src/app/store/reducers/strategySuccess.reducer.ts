@@ -17,7 +17,7 @@ export function strategySuccessReducer(
     state: number[][] = initialState,
     action: ExperimentsActionsTypes
 ): IExperiment[] {
-    if (action instanceof AddExperimentToList) {
+    if (action instanceof InitStrategySyccess) {
         action.payload.forEach((el: IExperiment) => { el._id = state.length; state.push(el); });
         return [...state];
     }

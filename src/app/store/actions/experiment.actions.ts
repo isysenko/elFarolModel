@@ -67,6 +67,7 @@ export class ResetStore {
     public readonly type: string = ExperimentsActions.RESET;
 }
 export class InitStrategySyccess {
+    public constructor(public payload: IExperiment[]) {}
     public readonly type: string = ExperimentsActions.INIT_STRATEGY_SUCCESS;
 }
 
