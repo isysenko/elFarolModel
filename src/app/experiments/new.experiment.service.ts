@@ -188,15 +188,30 @@ export class NewExperimentsService {
     }
 
     private increaseStrategiesCounters(people: IPerson[], str: IStrategy[]): IStrategy[] {
-        const strategy: IStrategy[] = [...str];
-        strategy.forEach((el: IStrategy) => (el.count = 0));
+        const strat: IStrategy[] = [...str];
+        strat.forEach((el: IStrategy) => (el.count = 0));
+        const strategy: IStrategy[] = [];
         for (let i: number = 0; i < 10; i++) {
-            strategy.push({ name: i.toString(), index: i, count: 0, checked: str[i].checked });
+            strategy.push({ name: i.toString(), index: i, count: 0, checked: str[i].checked, success: 0, failed: 0 });
         }
         for (let i: number = 0; i < people.length; i++) {
             for (let j: number = 0; j < strategy.length; j++) {
                 if (people[i].strategy === strategy[j].index) {
                     strategy[j].count++;
+                }
+            }
+        }
+        for (let i: number = 0; i < people.length; i++) {
+            for (let j: number = 0; j < strategy.length; j++) {
+                if (people[i].strategy === strategy[j].index) {
+                    if (
+                        people[i].lastDecisions[people[i].lastDecisions.length - 1] &&
+                        !people[i].lastResults[people[i].lastResults.length - 1]
+                    ) {
+                        strategy[j].failed++;
+                    } else {
+                        strategy[j].success++;
+                    }
                 }
             }
         }

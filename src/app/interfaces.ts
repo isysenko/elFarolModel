@@ -31,4 +31,6 @@ export interface IStrategy {
     name: string;
     count: number;
     checked: boolean;
+    success: number;
+    failed: number;
 }

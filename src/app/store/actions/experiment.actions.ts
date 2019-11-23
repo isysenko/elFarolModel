@@ -55,7 +55,6 @@ import { IExperiment } from '../../interfaces';
 export enum ExperimentsActions {
     ADD_EXPERIMENT = 'ADD_EXPERIMENT',
     RESET = 'RESET',
-    INIT_STRATEGY_SUCCESS = 'INIT_STRATEGY_SUCCESS',
 }
 // tslint:disable: max-classes-per-file
 
@@ -66,9 +65,5 @@ export class AddExperimentToList {
 export class ResetStore {
     public readonly type: string = ExperimentsActions.RESET;
 }
-export class InitStrategySyccess {
-    public constructor(public payload: IExperiment[]) {}
-    public readonly type: string = ExperimentsActions.INIT_STRATEGY_SUCCESS;
-}
 
-export type ExperimentsActionsTypes = AddExperimentToList | ResetStore | InitStrategySyccess;
+export type ExperimentsActionsTypes = AddExperimentToList | ResetStore;

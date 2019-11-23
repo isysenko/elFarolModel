@@ -26,11 +26,9 @@ import { IExperiment } from '../interfaces';
 
 export interface IStore {
     experiments: IExperiment[];
-    strategySuccess: number[][];
 }
 
 // tslint:disable-next-line: no-any
 export const reducers: ActionReducerMap<IStore, any> = {
     experiments: experimentsReducer,
-    strategySuccess : strategySuccessReducer
 };

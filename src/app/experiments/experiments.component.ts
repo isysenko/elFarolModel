@@ -25,9 +25,9 @@ export class ExperimentsComponent {
         { name: 'Якщо бар не дорогий (8)', value: true },
         { name: 'Якщо бар не дорогий і минулого разу залишився задоволеним (9)', value: true },
     ];
-    public barCapacity: string = '6';
-    public experimentsNumber: string = '10';
-    public peopleNumber: string = '10';
+    public barCapacity: string = '60';
+    public experimentsNumber: string = '100';
+    public peopleNumber: string = '100';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
@@ -45,9 +45,23 @@ export class ExperimentsComponent {
         const strategy: IStrategy[] = [];
         for (let i: number = 0; i < this.strategies.length; i++) {
             if (this.strategies[i].value) {
-                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: true});
+                strategy.push({
+                    name: this.strategies[i].name,
+                    index: i,
+                    count: 0,
+                    checked: true,
+                    success: 0,
+                    failed: 0,
+                });
             } else {
-                strategy.push({ name: this.strategies[i].name, index: i, count: 0, checked: false});
+                strategy.push({
+                    name: this.strategies[i].name,
+                    index: i,
+                    count: 0,
+                    checked: false,
+                    success: 0,
+                    failed: 0,
+                });
             }
         }
         const experimentsToList: IExperiment[] = exp.startExperiments(
