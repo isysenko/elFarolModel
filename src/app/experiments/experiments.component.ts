@@ -25,9 +25,9 @@ export class ExperimentsComponent {
         { name: 'Якщо бар не дорогий (8)', value: true },
         { name: 'Якщо бар не дорогий і минулого разу залишився задоволеним (9)', value: true },
     ];
-    public barCapacity: string = '60';
-    public experimentsNumber: string = '100';
-    public peopleNumber: string = '100';
+    public barCapacity: string = '6';
+    public experimentsNumber: string = '10';
+    public peopleNumber: string = '10';
     public people$?: Observable<IPerson[]>;
     public experiments$?: Observable<IExperiment[]>;
     public ifExpRun: boolean = false;
