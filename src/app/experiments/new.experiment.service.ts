@@ -192,7 +192,16 @@ export class NewExperimentsService {
         strat.forEach((el: IStrategy) => (el.count = 0));
         const strategy: IStrategy[] = [];
         for (let i: number = 0; i < 10; i++) {
-            strategy.push({ name: i.toString(), index: i, count: 0, checked: str[i].checked, success: 0, failed: 0 });
+            strategy.push({
+                name: i.toString(),
+                index: i,
+                count: 0,
+                checked: str[i].checked,
+                success: 0,
+                failed: 0,
+                neytral: 0,
+                percentToGo: 0
+            });
         }
         for (let i: number = 0; i < people.length; i++) {
             for (let j: number = 0; j < strategy.length; j++) {
@@ -210,7 +219,14 @@ export class NewExperimentsService {
                     ) {
                         strategy[j].failed++;
                     } else {
-                        strategy[j].success++;
+                        if (!people[i].lastDecisions[people[i].lastDecisions.length - 1]) {
+                            strategy[j].neytral++;
+                        } else {
+                            strategy[j].success++;
+                        }
+                    }
+                    if(people[i].lastDecisions[people[i].lastDecisions.length - 1]){
+                        strategy[j].percentToGo++;
                     }
                 }
             }
@@ -264,7 +280,7 @@ export function checkStrategy(person: IPerson, strategies: IStrategy[], lastTime
         if (strLength === person.badStrategies.length + 1) {
             person.badStrategies = new Array();
         }
-        let x: number = Math.floor(Math.random() * (strategies.length - 1));
+        let x: number = Math.floor(Math.random() * (strategies.length));
         person.badStrategies.push(person.strategy);
         let count: number = 0;
         while (

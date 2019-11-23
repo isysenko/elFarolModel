@@ -52,6 +52,8 @@ export class ExperimentsComponent {
                     checked: true,
                     success: 0,
                     failed: 0,
+                    neytral: 0,
+                    percentToGo: 0,
                 });
             } else {
                 strategy.push({
@@ -61,6 +63,8 @@ export class ExperimentsComponent {
                     checked: false,
                     success: 0,
                     failed: 0,
+                    neytral: 0,
+                    percentToGo: 0,
                 });
             }
         }

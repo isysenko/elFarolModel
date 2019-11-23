@@ -33,4 +33,6 @@ export interface IStrategy {
     checked: boolean;
     success: number;
     failed: number;
+    neytral: number;
+    percentToGo: number;
 }
