@@ -18,8 +18,18 @@ export interface IPerson {
     lastDecisions: boolean[];
     lastResults: boolean[];
     coefficient: number;
+    startCoeficient: number;
     strategy: number;
     badStrategies: number[];
+    strategyChange: StratCountPerson[]; 
+}
+export interface StratCountPerson{
+    id: number;
+    count: number[];
+}
+export interface ResultType{
+    experiments: IExperiment[];
+    people: IPerson[];
 }
 
 export interface IParamsPeople {

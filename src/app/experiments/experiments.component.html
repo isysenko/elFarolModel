@@ -50,3 +50,16 @@
         <span *ngFor="let str of item.strategies"> {{ str.index }}: {{ str.count }} , </span><br />
     </div>
 </div>
+<div *ngIf="ifExpRun" style="display: block">
+    <canvas baseChart [datasets]="chartStrategiesCount0" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount1" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount2" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount3" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount4" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount5" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount6" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount7" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount8" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+    <canvas baseChart [datasets]="chartStrategiesCount9" [labels]="chartLabels" [chartType]="chartType"> </canvas>
+</div>
+

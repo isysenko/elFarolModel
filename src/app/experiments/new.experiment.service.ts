@@ -1,4 +1,4 @@
-import { IExperiment, IPerson, IStrategy } from '../interfaces';
+import { IExperiment, IPerson, IStrategy, ResultType } from '../interfaces';
 import {
     alwaysTrueStrategy,
     companyStrategy,
@@ -22,7 +22,7 @@ export class NewExperimentsService {
         barCapacity: number,
         experimentsNumber: number,
         peopleNumber: number
-    ): IExperiment[] {
+    ): ResultType {
         let people: IPerson[] = this.generatePeoples(peopleNumber, str);
         let barPrice: string = 'inexpensive';
         for (let experimentsCount: number = 0; experimentsCount <= experimentsNumber - 1; experimentsCount++) {
@@ -83,8 +83,7 @@ export class NewExperimentsService {
                 }
             }
         }
-
-        return this.experiments;
+        return { experiments: this.experiments, people: people };
     }
     private generatePeoples(nmbrPeople: number, strategies: IStrategy[]): IPerson[] {
         const people: IPerson[] = [];
@@ -103,14 +102,28 @@ export class NewExperimentsService {
             while (!strategies[x].checked) {
                 x = Math.floor(Math.random() * (strategies.length - 1));
             }
+            const randNum: number = this.getRandomInt(9);
             people.push({
                 _id: i,
                 friendsIds: this.getRandomArray(i),
                 lastDecisions: new Array(),
                 lastResults: new Array(),
-                coefficient: this.getRandomInt(9),
+                coefficient: randNum,
+                startCoeficient: randNum,
                 strategy: x,
                 badStrategies: [],
+                strategyChange: [
+                    { id: 0, count: [0] },
+                    { id: 1, count: [0] },
+                    { id: 2, count: [0] },
+                    { id: 3, count: [0] },
+                    { id: 4, count: [0] },
+                    { id: 5, count: [0] },
+                    { id: 6, count: [0] },
+                    { id: 7, count: [0] },
+                    { id: 8, count: [0] },
+                    { id: 9, count: [0] },
+                ],
             });
             strategy.counter++;
         }
@@ -200,7 +213,7 @@ export class NewExperimentsService {
                 success: 0,
                 failed: 0,
                 neytral: 0,
-                percentToGo: 0
+                percentToGo: 0,
             });
         }
         for (let i: number = 0; i < people.length; i++) {
@@ -225,7 +238,7 @@ export class NewExperimentsService {
                             strategy[j].success++;
                         }
                     }
-                    if(people[i].lastDecisions[people[i].lastDecisions.length - 1]){
+                    if (people[i].lastDecisions[people[i].lastDecisions.length - 1]) {
                         strategy[j].percentToGo++;
                     }
                 }
@@ -271,6 +284,7 @@ export function checkStrategy(person: IPerson, strategies: IStrategy[], lastTime
     const start: number =
         person.coefficient >= person.lastResults.length ? 0 : person.lastResults.length - person.coefficient - 1;
     if (!person.lastResults[start]) {
+        person.coefficient = person.startCoeficient;
         let strLength: number = 0;
         strategies.forEach((item: IStrategy) => {
             if (item.checked) {
@@ -280,7 +294,7 @@ export function checkStrategy(person: IPerson, strategies: IStrategy[], lastTime
         if (strLength === person.badStrategies.length + 1) {
             person.badStrategies = new Array();
         }
-        let x: number = Math.floor(Math.random() * (strategies.length));
+        let x: number = Math.floor(Math.random() * strategies.length);
         person.badStrategies.push(person.strategy);
         let count: number = 0;
         while (
@@ -291,6 +305,9 @@ export function checkStrategy(person: IPerson, strategies: IStrategy[], lastTime
             x = Math.floor(Math.random() * (strategies.length - 1));
         }
         person.strategy = strategies[x].index;
+        person.strategyChange[strategies[x].index].count.push(1);
+    } else {
+        person.strategyChange[person.strategy].count[person.strategyChange[person.strategy].count.length - 1] += 1;
     }
     return { ...person };
 }

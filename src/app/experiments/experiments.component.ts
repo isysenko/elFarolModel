@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { IStore } from '../store';
 import { Observable } from 'rxjs';
-import { IExperiment, IPerson, IStrategy } from '../interfaces';
+import { IExperiment, IPerson, IStrategy, ResultType } from '../interfaces';
 import { NewExperimentsService } from './new.experiment.service';
 import { AddExperimentToList, ResetStore } from '../store/actions/experiment.actions';
 
@@ -34,6 +34,21 @@ export class ExperimentsComponent {
     public showMore: boolean = false;
     public showMoreStrategy: boolean = false;
     public newExperiments: IExperiment[] = [];
+    public chartLabels: number[] = [];
+    // tslint:disable-next-line: no-any
+    public chartType: string = 'bar';
+    public experiments?: IExperiment[];
+    // tslint:disable-next-line: no-any
+    public chartStrategiesCount0: any[] = [{ data: [], label: '0', borderWidth: 2, fill: false }];
+    public chartStrategiesCount1: any[] = [{ data: [], label: '1', borderWidth: 2, fill: false }];
+    public chartStrategiesCount2: any[] = [{ data: [], label: '2', borderWidth: 2, fill: false }];
+    public chartStrategiesCount3: any[] = [{ data: [], label: '3', borderWidth: 2, fill: false }];
+    public chartStrategiesCount4: any[] = [{ data: [], label: '4', borderWidth: 2, fill: false }];
+    public chartStrategiesCount5: any[] = [{ data: [], label: '5', borderWidth: 2, fill: false }];
+    public chartStrategiesCount6: any[] = [{ data: [], label: '6', borderWidth: 2, fill: false }];
+    public chartStrategiesCount7: any[] = [{ data: [], label: '7', borderWidth: 2, fill: false }];
+    public chartStrategiesCount8: any[] = [{ data: [], label: '8', borderWidth: 2, fill: false }];
+    public chartStrategiesCount9: any[] = [{ data: [], label: '9', borderWidth: 2, fill: false }];
 
     public constructor(private _store: Store<IStore>) {}
     public ngOnInit(): void {
@@ -68,13 +83,108 @@ export class ExperimentsComponent {
                 });
             }
         }
-        const experimentsToList: IExperiment[] = exp.startExperiments(
+        const res: ResultType = exp.startExperiments(
             strategy,
             Number(this.barCapacity),
             Number(this.experimentsNumber),
             Number(this.peopleNumber)
         );
-        this._store.dispatch(new AddExperimentToList(experimentsToList));
+        this._store.dispatch(new AddExperimentToList(res.experiments));
+        console.log(res.people);
+
+        res.people.forEach((person: IPerson) => {
+            this.chartLabels.push(person._id);
+            this.chartStrategiesCount0[0].data.push(
+                person.strategyChange[0].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[0].count.length
+            );
+            this.chartStrategiesCount1[0].data.push(
+                person.strategyChange[1].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[1].count.length
+            );
+            this.chartStrategiesCount2[0].data.push(
+                person.strategyChange[2].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[2].count.length
+            );
+            this.chartStrategiesCount3[0].data.push(
+                person.strategyChange[3].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[3].count.length
+            );
+            this.chartStrategiesCount4[0].data.push(
+                person.strategyChange[4].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[4].count.length
+            );
+            this.chartStrategiesCount5[0].data.push(
+                person.strategyChange[5].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[5].count.length
+            );
+            this.chartStrategiesCount6[0].data.push(
+                person.strategyChange[6].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[6].count.length
+            );
+            this.chartStrategiesCount7[0].data.push(
+                person.strategyChange[7].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[7].count.length
+            );
+            this.chartStrategiesCount8[0].data.push(
+                person.strategyChange[8].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[8].count.length
+            );
+            this.chartStrategiesCount9[0].data.push(
+                person.strategyChange[9].count.reduce((item: number, currvalue: number) => item + currvalue) /
+                    person.strategyChange[9].count.length
+            );
+        });
+        console.log(
+            '0======>',
+            this.chartStrategiesCount0[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount0[0].data.length
+        );
+        console.log(
+            '1======>',
+            this.chartStrategiesCount1[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount1[0].data.length
+        );
+        console.log(
+            '2======>',
+            this.chartStrategiesCount2[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount2[0].data.length
+        );
+        console.log(
+            '3======>',
+            this.chartStrategiesCount3[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount3[0].data.length
+        );
+        console.log(
+            '4======>',
+            this.chartStrategiesCount4[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount4[0].data.length
+        );
+        console.log(
+            '5======>',
+            this.chartStrategiesCount5[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount5[0].data.length
+        );
+        console.log(
+            '6======>',
+            this.chartStrategiesCount6[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount6[0].data.length
+        );
+        console.log(
+            '7======>',
+            this.chartStrategiesCount7[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount7[0].data.length
+        );
+        console.log(
+            '8======>',
+            this.chartStrategiesCount8[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount8[0].data.length
+        );
+        console.log(
+            '9======>',
+            this.chartStrategiesCount9[0].data.reduce((item: number, currvalue: number) => item + currvalue) /
+                this.chartStrategiesCount9[0].data.length
+        );
         this.ifExpRun = true;
     }
     public showMoreInfo(): void {
